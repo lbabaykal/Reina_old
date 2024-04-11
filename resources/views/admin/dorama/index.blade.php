@@ -1,5 +1,5 @@
 @extends('admin.admin')
-@section('title', config('app.name') . ' - Добавить Аниме')
+@section('title', config('app.name') . ' - Дорамы')
 @section('content')
     <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -7,6 +7,9 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <caption class="p-5 text-xl font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                         Список дорам
+                        @if ($message = session('message'))
+                            - <span class="text-lime-500">{{ $message }}</span>
+                        @endif
                         <p class="mt-1 text-base text-blue-500 dark:text-gray-400 w-full text-center">
                             <a href="{{ route('admin.dorama.index') }}"
                                class="mx-10"

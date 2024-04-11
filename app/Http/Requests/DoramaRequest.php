@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AnimeRequest extends FormRequest
+class DoramaRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -24,9 +24,9 @@ class AnimeRequest extends FormRequest
                 'poster' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
                 'cover' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
 
-                'title_org' => ['required', 'string', 'min:1', 'max:255', 'unique:animes,title_org'],
-                'title_ru' => ['required', 'string', 'min:1', 'max:255',  'unique:animes,title_ru'],
-                'title_en' => ['required', 'string', 'min:1', 'max:255', 'unique:animes,title_en'],
+                'title_org' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_org'],
+                'title_ru' => ['required', 'string', 'min:1', 'max:255',  'unique:doramas,title_ru'],
+                'title_en' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_en'],
 
                 'type' => ['required', 'integer', 'exists:types,id'],
 
@@ -54,9 +54,9 @@ class AnimeRequest extends FormRequest
                 'poster' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
                 'cover' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
 
-                'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($this->anime)],
-                'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('animes')->ignore($this->anime)],
-                'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($this->anime)],
+                'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($this->dorama)],
+                'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('doramas')->ignore($this->dorama)],
+                'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($this->dorama)],
 
                 'type' => ['required', 'integer', 'exists:types,id'],
 

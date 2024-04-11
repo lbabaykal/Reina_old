@@ -1,17 +1,18 @@
 @extends('admin.admin')
-@section('title', config('app.name') . ' - Добавление аниме')
+@section('title', config('app.name') . ' - Редактирование дорамы')
 @section('content')
     <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
             <div class="relative overflow-x-auto shadow-md">
                 <div class="p-5 text-xl font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    Добавление Дорамы
+                    Редактирование дорамы
                     @if ($message = session('message'))
                         - <span class="text-lime-500">{{ $message }}</span>
                     @endif
                 </div>
-                <form action="{{ route('admin.dorama.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.dorama.update', $dorama) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PATCH')
                     <div class="grid gap-6 mb-6 md:grid-cols-3">
                         <div>
                             <label for="title_ru"
@@ -21,7 +22,7 @@
                             <input id="title_ru"
                                    type="text"
                                    name="title_ru"
-                                   value="{{ old('title_ru') }}"
+                                   value="{{ old('title_ru') ?? $dorama->title_ru }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -33,7 +34,7 @@
                             <input id="title_org"
                                    type="text"
                                    name="title_org"
-                                   value="{{ old('title_org') }}"
+                                   value="{{ old('title_org') ?? $dorama->title_org }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -45,7 +46,7 @@
                             <input id="title_en"
                                    type="text"
                                    name="title_en"
-                                   value="{{ old('title_en') }}"
+                                   value="{{ old('title_en') ?? $dorama->title_en }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -59,7 +60,7 @@
                             >
                                 <option>Пусто</option>
                                 @foreach($types as $type)
-                                    <option value="{{ $type->id }}" @selected($type->id == old('type'))>{{ $type->title_ru }}</option>
+                                    <option value="{{ $type->id }}" @selected((old('type') ?? $dorama->type_id) == $type->id)>{{ $type->title_ru }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -83,7 +84,9 @@
                                                        type="checkbox"
                                                        value="{{ $genre->id }}"
                                                        name="genres[]"
-                                                       @checked(old('genres') && in_array($genre->id, old('genres')))
+                                                            @if(old('genres') ? in_array($genre->id, old('genres')) : $dorama->genres->contains($genre->id))
+                                                                @checked(true)
+                                                            @endif
                                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                                 <label for="checkbox-item-{{ $genre->id }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     {{ $genre->title_ru }}
@@ -114,7 +117,9 @@
                                                        type="checkbox"
                                                        value="{{ $studio->id }}"
                                                        name="studios[]"
-                                                       @checked(old('studios') && in_array($studio->id, old('studios')))
+                                                           @if(old('studios') ? in_array($studio->id, old('studios')) : $dorama->studios->contains($studio->id))
+                                                               @checked(true)
+                                                           @endif
                                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                                 <label for="checkbox-item-{{ $studio->id }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     {{ $studio->title }}
@@ -135,7 +140,11 @@
                             >
                                 <option selected>Пусто</option>
                                 @foreach($countries as $country)
-                                    <option value="{{ $country->id }}" @selected($country->id == old('country'))>{{ $country->title_ru }}</option>
+                                    <option value="{{ $country->id }}"
+                                        @selected((old('country') ?? $dorama->country_id) == $country->id)
+                                    >
+                                        {{ $country->title_ru }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -149,7 +158,11 @@
                             >
                                 <option selected>Пусто</option>
                                 @foreach($age_ratings as $age_rating)
-                                    <option value="{{ $age_rating->value }}" @selected($age_rating->value == old('age_rating'))>{{ $age_rating->value }}</option>
+                                    <option value="{{ $age_rating->value }}"
+                                        @selected((old('age_rating') ?? $dorama->age_rating) == $age_rating->value)
+                                    >
+                                        {{ $age_rating->value }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -161,7 +174,7 @@
                             <input id="release"
                                    type="date"
                                    name="release"
-                                   value="{{ old('release') }}"
+                                   value="{{ old('release') ?? $dorama->release}}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -173,7 +186,7 @@
                             <input id="episodes_released"
                                    type="text"
                                    name="episodes_released"
-                                   value="{{ old('episodes_released') }}"
+                                   value="{{ old('episodes_released') ?? $dorama->episodes_released }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -185,7 +198,7 @@
                             <input id="episodes_total"
                                    type="text"
                                    name="episodes_total"
-                                   value="{{ old('episodes_total') }}"
+                                   value="{{ old('episodes_total') ?? $dorama->episodes_total }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -197,7 +210,7 @@
                             <input id="duration"
                                    type="text"
                                    name="duration"
-                                   value="{{ old('duration') }}"
+                                   value="{{ old('duration') ?? $dorama->duration }}"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                         </div>
@@ -210,7 +223,11 @@
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             >
                                 @foreach($statuses as $status)
-                                    <option value="{{ $status->value }}" @selected($status->value == old('status'))>{{ $status->value }}</option>
+                                    <option value="{{ $status->value }}"
+                                        @selected((old('status') ?? $dorama->status) == $status->value)
+                                    >
+                                        {{ $status->value }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -223,7 +240,7 @@
                                         type="checkbox"
                                         class="sr-only peer"
                                         name="is_comment"
-                                        @checked( old('is_comment') )
+                                    @checked($dorama->is_comment)
                                 >
                                 <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -239,7 +256,7 @@
                                 <input type="checkbox"
                                        class="sr-only peer"
                                        name="is_rating"
-                                        @checked( old('is_rating') )
+                                    @checked($dorama->is_rating)
                                 >
                                 <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -257,6 +274,7 @@
                                    id="poster"
                                    type="file"
                                    name="poster"
+                                   value="{{ $dorama->poster }}"
                             >
                         </div>
                         <div>
@@ -269,6 +287,7 @@
                                    id="cover"
                                    type="file"
                                    name="cover"
+                                   value="{{ $dorama->cover }}"
                             >
                         </div>
                     </div>
@@ -278,7 +297,7 @@
                               name="description"
                               class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                               placeholder="Напишите описание..."
-                    >{{ old('description') }}</textarea>
+                    >{{ old('description') ?? $dorama->description }}</textarea>
 
                     <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Добавить</button>
                 </form>

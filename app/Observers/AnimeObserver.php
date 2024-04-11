@@ -31,8 +31,8 @@ class AnimeObserver
 
     public function deleted(Anime $anime): void
     {
-        Storage::disk('anime_posters')->delete($anime->poster);
-        Storage::disk('anime_covers')->delete($anime->cover);
+        Storage::disk('anime_posters')->delete($anime->getOriginal('poster'));
+        Storage::disk('anime_covers')->delete($anime->getOriginal('cover'));
     }
 
     public function restored(Anime $anime): void
@@ -42,7 +42,7 @@ class AnimeObserver
 
     public function forceDeleted(Anime $anime): void
     {
-        Storage::disk('anime_posters')->delete($anime->poster);
-        Storage::disk('anime_covers')->delete($anime->cover);
+        Storage::disk('anime_posters')->delete($anime->getOriginal('poster'));
+        Storage::disk('anime_covers')->delete($anime->getOriginal('cover'));
     }
 }

@@ -31,8 +31,8 @@ class DoramaObserver
 
     public function deleted(Dorama $dorama): void
     {
-        Storage::disk('dorama_posters')->delete($dorama->poster);
-        Storage::disk('dorama_covers')->delete($dorama->cover);
+        Storage::disk('dorama_posters')->delete($dorama->getOriginal('poster'));
+        Storage::disk('dorama_covers')->delete($dorama->getOriginal('cover'));
     }
 
     public function restored(Dorama $dorama): void
@@ -42,7 +42,7 @@ class DoramaObserver
 
     public function forceDeleted(Dorama $dorama): void
     {
-        Storage::disk('dorama_posters')->delete($dorama->poster);
-        Storage::disk('dorama_covers')->delete($dorama->cover);
+        Storage::disk('dorama_posters')->delete($dorama->getOriginal('poster'));
+        Storage::disk('dorama_covers')->delete($dorama->getOriginal('cover'));
     }
 }

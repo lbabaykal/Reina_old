@@ -1,5 +1,5 @@
 @extends('admin.admin')
-@section('title', config('app.name') . ' - Главная')
+@section('title', config('app.name') . ' - Добавление аниме')
 @section('content')
     <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
@@ -83,7 +83,7 @@
                                                        type="checkbox"
                                                        value="{{ $genre->id }}"
                                                        name="genres[]"
-                                                       @checked(in_array($genre->id, old('genres', [])))
+                                                       @checked(old('genres') && in_array($genre->id, old('genres')))
                                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                                 <label for="checkbox-item-{{ $genre->id }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     {{ $genre->title_ru }}
@@ -114,7 +114,7 @@
                                                        type="checkbox"
                                                        value="{{ $studio->id }}"
                                                        name="studios[]"
-                                                       @checked(in_array($studio->id, old('studios', [])))
+                                                       @checked(old('studios') && in_array($studio->id, old('studios')))
                                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                                 <label for="checkbox-item-{{ $studio->id }}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                     {{ $studio->title }}

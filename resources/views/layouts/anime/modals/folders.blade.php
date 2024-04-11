@@ -33,13 +33,13 @@
                         />
                         <label for="1"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="w-full flex items-center">
+                            <span class="w-full flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="w-7 h-7 stroke-blue-500 fill-blue-500 mx-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
                                 </svg>
                                 {{ __('Смотрю') }}
-                            </div>
+                            </span>
                         </label>
                     </div>
 
@@ -52,14 +52,14 @@
                         />
                         <label for="2"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="w-full flex items-center">
+                            <span class="w-full flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      class="w-7 h-7 stroke-violet-500 fill-violet-500 mx-3">
                                     <circle cx="12" cy="12" r="10" stroke-width="1.5"/>
                                     <path d="M12 8V12L14.5 14.5" stroke-width="1.5" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
                                 {{ __('В планах') }}
-                            </div>
+                            </span>
                         </label>
                     </div>
 
@@ -72,13 +72,13 @@
                         />
                         <label for="3"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="w-full flex items-center">
+                            <span class="w-full flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="w-7 h-7 stroke-red-500 fill-red-500 mx-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                 </svg>
                                 {{ __('Любимое') }}
-                            </div>
+                            </span>
                         </label>
                     </div>
 
@@ -91,13 +91,13 @@
                         />
                         <label for="4"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="w-full flex items-center">
+                            <span class="w-full flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="w-7 h-7 stroke-lime-500 mx-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                                 </svg>
                                 {{ __('Просмотрено') }}
-                            </div>
+                            </span>
                         </label>
                     </div>
 
@@ -110,13 +110,13 @@
                         />
                         <label for="5"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="flex justify-start w-full">
+                            <span class="flex justify-start w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                      class="w-7 h-7 stroke-red-500 mx-3">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
                                 {{ __('Брошено') }}
-                            </div>
+                            </span>
                         </label>
                     </div>
 
@@ -129,13 +129,13 @@
                         />
                         <label for="6"
                                class="inline-flex items-center justify-between w-full p-2 cursor-pointer peer-checked:bg-white peer-checked:text-black">
-                            <div class="group flex justify-start w-full">
+                            <span class="group flex justify-start w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                                      class="w-7 h-7 fill-orange-400 mx-3">
                                 <path d="M1 1h6.5v6.5H1V1zM8.5 1H15v6.5H8.5V1zM1 8.5h6.5V15H1V8.5zM8.5 8.5H15V15H8.5V8.5z"/>
                                 </svg>
                                 Романтика
-                            </div>
+                            </span>
                         </label>
                     </div>
                 </div>

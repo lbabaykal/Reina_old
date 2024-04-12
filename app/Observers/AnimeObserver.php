@@ -31,6 +31,7 @@ class AnimeObserver
 
     public function deleted(Anime $anime): void
     {
+        $anime->ratings()->delete();
         Storage::disk('anime_posters')->delete($anime->getOriginal('poster'));
         Storage::disk('anime_covers')->delete($anime->getOriginal('cover'));
     }

@@ -4,10 +4,12 @@ namespace App\Traits;
 
 use App\Models\Country;
 use App\Models\Genre;
+use App\Models\Rating;
 use App\Models\Studio;
 use App\Models\Type;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait AnimeAndDoramTrait
 {
@@ -30,4 +32,10 @@ trait AnimeAndDoramTrait
     {
         return $this->belongsToMany(Genre::class);
     }
+
+    public function ratings(): MorphMany
+    {
+        return $this->morphMany(Rating::class, 'ratingable');
+    }
+
 }

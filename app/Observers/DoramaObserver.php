@@ -31,6 +31,7 @@ class DoramaObserver
 
     public function deleted(Dorama $dorama): void
     {
+        $dorama->ratings()->delete();
         Storage::disk('dorama_posters')->delete($dorama->getOriginal('poster'));
         Storage::disk('dorama_covers')->delete($dorama->getOriginal('cover'));
     }

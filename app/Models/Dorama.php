@@ -16,7 +16,6 @@ class Dorama extends Model
     use HasSlug;
     use AnimeAndDoramTrait;
 
-
     protected $fillable = [
         'slug',
         'poster',

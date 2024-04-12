@@ -38,17 +38,29 @@ Route::get('/filter')->name('article.filter_article');
 
 Route::get('/', MainController::class)->name('main');
 
-Route::get('/anime/{anime:slug}', [AnimeController::class, 'show'])->name('anime.show');
-Route::get('/anime', [AnimeController::class, 'index'])->name('anime.index');
+Route::prefix('anime')->name('anime.')->group(function () {
+    Route::get('/{anime:slug}', [AnimeController::class, 'show'])->name('show');
+    Route::get('/', [AnimeController::class, 'index'])->name('index');
 
-Route::get('/dorama/{dorama:slug}', [DoramaController::class, 'show'])->name('dorama.show');
-Route::get('/dorama', [DoramaController::class, 'index'])->name('dorama.index');
+    Route::middleware('auth')->post('/{anime:slug}/rating', [AnimeController::class, 'rating'])
+        ->name('rating');
+});
+
+
+Route::prefix('dorama')->name('dorama.')->group(function () {
+    Route::get('/{dorama:slug}', [DoramaController::class, 'show'])->name('show');
+    Route::get('/', [DoramaController::class, 'index'])->name('index');
+
+    Route::middleware('auth')->post('/{dorama:slug}/rating', [DoramaController::class, 'rating'])
+        ->name('rating');
+});
+
 
 
 Route::get('/admin', AdminPanelController::class)
     ->name('admin.index');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy']);
     Route::prefix('anime')->name('anime.')->group(function () {
         Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');

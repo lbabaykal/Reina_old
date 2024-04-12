@@ -13,11 +13,8 @@ use App\Models\Studio;
 use App\Models\Type;
 use App\Reina;
 use App\Services\DoramaServices;
-use App\Services\ImageServices;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class DoramaAdminController extends Controller

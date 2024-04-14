@@ -84,10 +84,10 @@
                                 {{ $anime->status }}
                             </td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('admin.anime.edit', $anime) }}"
+                                <a href="{{ route('admin.anime.restore', $anime) }}"
                                    class="hover:text-love"
                                 >
-                                    Реадактировать
+                                    Восстановить
                                 </a>
                             </td>
                         </tr>

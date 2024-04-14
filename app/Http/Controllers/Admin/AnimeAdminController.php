@@ -79,6 +79,14 @@ class AnimeAdminController extends Controller
         return $animeServices->update($request, $anime);
     }
 
+    public function restore($anime): RedirectResponse
+    {
+        $anime = Anime::withTrashed()->where('slug', $anime)->firstOrFail();
+        $anime->restore();
+
+        return redirect()->route('admin.anime.index')->with('message', "Аниме {$anime->title_ru} восстановлено.");
+    }
+
     public function draft(): View
     {
         $animes = Anime::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
@@ -116,5 +124,18 @@ class AnimeAdminController extends Controller
             ->withQueryString();
 
         return view('admin.anime.index')->with('animes', $animes);
+    }
+
+    public function deleted(): View
+    {
+        $animes = Anime::query()->onlyTrashed()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+            ->with('type')
+            ->with('country')
+            ->latest('updated_at')
+            ->paginate(Reina::COUNT_ADMIN_ITEMS)
+            ->withQueryString();
+
+        return view('admin.anime.deleted')->with('animes', $animes);
     }
 }

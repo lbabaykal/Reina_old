@@ -79,6 +79,14 @@ class DoramaAdminController extends Controller
         return $doramaServices->update($request, $dorama);
     }
 
+    public function restore($dorama): RedirectResponse
+    {
+        $dorama = Dorama::withTrashed()->where('slug', $dorama)->firstOrFail();
+        $dorama->restore();
+
+        return redirect()->route('admin.dorama.index')->with('message', "Дорама {$dorama->title_ru} восстановлена.");
+    }
+
     public function draft(): View
     {
         $doramas = Dorama::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
@@ -116,5 +124,18 @@ class DoramaAdminController extends Controller
             ->withQueryString();
 
         return view('admin.dorama.index')->with('doramas', $doramas);
+    }
+
+    public function deleted(): View
+    {
+        $doramas = Dorama::query()->onlyTrashed()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+            ->with('type')
+            ->with('country')
+            ->latest('updated_at')
+            ->paginate(Reina::COUNT_ADMIN_ITEMS)
+            ->withQueryString();
+
+        return view('admin.dorama.deleted')->with('doramas', $doramas);
     }
 }

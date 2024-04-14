@@ -66,6 +66,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');
         Route::get('/published', [AnimeAdminController::class, 'published'])->name('published');
         Route::get('/archive', [AnimeAdminController::class, 'archive'])->name('archive');
+        Route::get('/deleted', [AnimeAdminController::class, 'deleted'])->name('deleted');
+        Route::get('/{anime:slug}/restore', [AnimeAdminController::class, 'restore'])->name('restore');
     });
 
     Route::resource('/dorama', DoramaAdminController::class)->except(['show', 'destroy']);
@@ -73,6 +75,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/draft', [DoramaAdminController::class, 'draft'])->name('draft');
         Route::get('/published', [DoramaAdminController::class, 'published'])->name('published');
         Route::get('/archive', [DoramaAdminController::class, 'archive'])->name('archive');
+        Route::get('/deleted', [DoramaAdminController::class, 'deleted'])->name('deleted');
+        Route::get('/{dorama:slug}/restore', [DoramaAdminController::class, 'restore'])->name('restore');
     });
 
     Route::resource('/types', TypeAdminController::class)->except(['show', 'destroy']);

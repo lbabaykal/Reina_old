@@ -15,7 +15,7 @@
         </div>
 
         <div class="w-full mt-2 px-2.5 grid gap-3 place-items-center grid-flow-row grid-cols-8">
-            @each('layouts.dorama.card', $dorams, 'dorama')
+            @each('layouts.dorama.card', $doramas, 'dorama')
         </div>
     </section>
 @endsection

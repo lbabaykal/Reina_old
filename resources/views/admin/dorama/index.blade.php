@@ -31,6 +31,11 @@
                             >
                                 В архиве
                             </a>
+                            <a href="{{ route('admin.dorama.deleted') }}"
+                               class="mx-10"
+                            >
+                                Удаленные
+                            </a>
                         </p>
                         <p class="mt-1 text-base text-red-500 dark:text-gray-400">
                             <a href="{{ route('admin.dorama.create') }}">

@@ -9,8 +9,10 @@ use App\Http\Controllers\Admin\StudiosAdminController;
 use App\Http\Controllers\Admin\TypeAdminController;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\DoramaController;
+use App\Http\Controllers\Folder\AnimeFolderController;
+use App\Http\Controllers\Folder\DoramaFolderController;
+use App\Http\Controllers\Folder\FolderController;
 use App\Http\Controllers\MainController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,55 +35,82 @@ Route::middleware([
     })->name('dashboard');
 });
 
-
-Route::get('/filter')->name('article.filter_article');
+//========================================================================================
 
 Route::get('/', MainController::class)->name('main');
 
+// ====ANIME====
 Route::prefix('anime')->name('anime.')->group(function () {
     Route::get('/{anime:slug}', [AnimeController::class, 'show'])->name('show');
     Route::get('/', [AnimeController::class, 'index'])->name('index');
 
-    Route::middleware('auth')->post('/{anime:slug}/rating', [AnimeController::class, 'rating'])
-        ->name('rating');
+    Route::middleware('auth')->group(function () {
+        Route::post('/{anime:slug}/rating', [AnimeController::class, 'rating'])->name('rating');
+        Route::post('/{anime:slug}/favorite', [AnimeController::class, 'favorite'])->name('favorite');
+    });
 });
 
-
+// ====DORAMA====
 Route::prefix('dorama')->name('dorama.')->group(function () {
     Route::get('/{dorama:slug}', [DoramaController::class, 'show'])->name('show');
     Route::get('/', [DoramaController::class, 'index'])->name('index');
 
-    Route::middleware('auth')->post('/{dorama:slug}/rating', [DoramaController::class, 'rating'])
-        ->name('rating');
+    Route::middleware('auth')->group(function () {
+        Route::post('/{dorama:slug}/rating', [DoramaController::class, 'rating'])->name('rating');
+        Route::post('/{dorama:slug}/favorite', [DoramaController::class, 'favorite'])->name('favorite');
+    });
 });
 
+// ====FOLDERS====
+Route::middleware('auth')->prefix('folders')->name('folders.')->group(function () {
+    Route::get('/', [FolderController::class, 'index'])->name('index');
+    Route::get('/{folder}/edit', [FolderController::class, 'edit'])->name('edit');
+    Route::patch('/{folder}', [FolderController::class, 'update'])->name('update');
+    Route::delete('/{folder}', [FolderController::class, 'destroy'])->name('destroy');
 
 
-Route::get('/admin', AdminPanelController::class)
-    ->name('admin.index');
-
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy']);
-    Route::prefix('anime')->name('anime.')->group(function () {
-        Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');
-        Route::get('/published', [AnimeAdminController::class, 'published'])->name('published');
-        Route::get('/archive', [AnimeAdminController::class, 'archive'])->name('archive');
-        Route::get('/deleted', [AnimeAdminController::class, 'deleted'])->name('deleted');
-        Route::get('/{anime:slug}/restore', [AnimeAdminController::class, 'restore'])->name('restore');
+    Route::prefix('animes')->name('animes.')->group(function () {
+        Route::get('/', [AnimeFolderController::class, 'index'])->name('index');
+        Route::get('/create', [AnimeFolderController::class, 'create'])->name('create');
+        Route::post('/', [AnimeFolderController::class, 'store'])->name('store');
+        Route::get('/{folder}', [AnimeFolderController::class, 'show'])->name('show');
     });
 
-    Route::resource('/dorama', DoramaAdminController::class)->except(['show', 'destroy']);
-    Route::prefix('dorama')->name('dorama.')->group(function () {
-        Route::get('/draft', [DoramaAdminController::class, 'draft'])->name('draft');
-        Route::get('/published', [DoramaAdminController::class, 'published'])->name('published');
-        Route::get('/archive', [DoramaAdminController::class, 'archive'])->name('archive');
-        Route::get('/deleted', [DoramaAdminController::class, 'deleted'])->name('deleted');
-        Route::get('/{dorama:slug}/restore', [DoramaAdminController::class, 'restore'])->name('restore');
+    Route::prefix('doramas')->name('doramas.')->group(function () {
+        Route::get('/', [DoramaFolderController::class, 'index'])->name('index');
+        Route::get('/create', [DoramaFolderController::class, 'create'])->name('create');
+        Route::post('/', [DoramaFolderController::class, 'store'])->name('store');
+        Route::get('/{folder}', [DoramaFolderController::class, 'show'])->name('show');
     });
-
-    Route::resource('/types', TypeAdminController::class)->except(['show', 'destroy']);
-    Route::resource('/genres', GenreAdminController::class)->except(['show', 'destroy']);
-    Route::resource('/studios', StudiosAdminController::class)->except(['show', 'destroy']);
-    Route::resource('/countries', CountriesAdminController::class)->except(['show', 'destroy']);
 });
 
+// ====ADMIN====
+Route::middleware('auth')
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', AdminPanelController::class)->name('index');
+
+        Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy']);
+        Route::prefix('anime')->name('anime.')->group(function () {
+            Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');
+            Route::get('/published', [AnimeAdminController::class, 'published'])->name('published');
+            Route::get('/archive', [AnimeAdminController::class, 'archive'])->name('archive');
+            Route::get('/deleted', [AnimeAdminController::class, 'deleted'])->name('deleted');
+            Route::get('/{anime:slug}/restore', [AnimeAdminController::class, 'restore'])->name('restore');
+        });
+
+        Route::resource('/dorama', DoramaAdminController::class)->except(['show', 'destroy']);
+        Route::prefix('dorama')->name('dorama.')->group(function () {
+            Route::get('/draft', [DoramaAdminController::class, 'draft'])->name('draft');
+            Route::get('/published', [DoramaAdminController::class, 'published'])->name('published');
+            Route::get('/archive', [DoramaAdminController::class, 'archive'])->name('archive');
+            Route::get('/deleted', [DoramaAdminController::class, 'deleted'])->name('deleted');
+            Route::get('/{dorama:slug}/restore', [DoramaAdminController::class, 'restore'])->name('restore');
+        });
+
+        Route::resource('/types', TypeAdminController::class)->except(['show', 'destroy']);
+        Route::resource('/genres', GenreAdminController::class)->except(['show', 'destroy']);
+        Route::resource('/studios', StudiosAdminController::class)->except(['show', 'destroy']);
+        Route::resource('/countries', CountriesAdminController::class)->except(['show', 'destroy']);
+});

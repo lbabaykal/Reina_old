@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -31,11 +32,6 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
-    public function ratings(): HasMany
-    {
-        return $this->hasMany(Rating::class);
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -70,4 +66,39 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function folders(): HasMany
+    {
+        return $this->hasMany(Folder::class);
+    }
+
+    public function foldersWithDefault(): HasMany
+    {
+        return $this->hasMany(Folder::class)
+            ->orWhere('user_id', 0)
+            ->WhereNot('folderable_type', 0);
+    }
+
+    public function favoriteAnimes(): HasManyThrough
+    {
+        return $this->hasManyThrough(Anime::class, Favorite::class, 'user_id', 'id', 'id', 'favoriteable_id')
+            ->where('favoriteable_type', Anime::class);
+    }
+
+    public function favoriteDoramas(): HasManyThrough
+    {
+        return $this->hasManyThrough(Dorama::class, Favorite::class, 'user_id', 'id', 'id', 'favoriteable_id')
+            ->where('favoriteable_type', Dorama::class);
+    }
+
 }

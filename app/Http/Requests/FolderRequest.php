@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RatingRequest extends FormRequest
+class FolderRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,9 +19,15 @@ class RatingRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'assessment' => ['required', 'numeric', 'between:0,10'],
-        ];
+        if ($this->isMethod('POST')) {
+            return [
+                'title' => ['required', 'string', 'min:2', 'max:255',],
+            ];
+        } elseif ($this->isMethod('PATCH')) {
+            return [
+                'title' => ['required', 'string', 'min:2', 'max:255',  Rule::unique('folders')->ignore($this->folder)],
+            ];
+        }
     }
 
 }

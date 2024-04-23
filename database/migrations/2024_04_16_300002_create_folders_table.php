@@ -9,16 +9,16 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('studios', function (Blueprint $table) {
+        Schema::create('folders', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
-            $table->string('title')->unique();
-            $table->softDeletes();
+            $table->string('title');
+            $table->unsignedBigInteger('user_id');
+            $table->string('folderable_type');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('studios');
+        Schema::dropIfExists('folders');
     }
 };

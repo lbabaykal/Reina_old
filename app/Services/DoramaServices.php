@@ -48,7 +48,7 @@ class DoramaServices
 
         try {
             DB::transaction(function () use ($dorama, $genres, $studios){
-                $dorama->save();
+                $dorama->update();
 
                 $dorama->genres()->attach($genres);
                 $dorama->studios()->attach($studios);

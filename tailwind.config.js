@@ -25,7 +25,8 @@ export default {
         extend: {
             colors: {
                 love: '#EC6161',
-                black2: 'rgba(53,56,91,1)',
+                blackSimple: '#24282F',
+                blackActive: 'rgba(53,56,91,1)',
                 // box-shadow: 0px 2px 4px rgba(0,0,0,0.2), 0px 0px 6px rgba(0,0,0,0.1);``
                 darkblue: 'rgba(6,1,54,0.9)',
                 darkblue2: 'rgba(6,1,54,1)',

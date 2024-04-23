@@ -97,7 +97,7 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('animes', $animes);
+        return view('admin.anime.index')->with('anime', $animes);
     }
 
     public function published(): View

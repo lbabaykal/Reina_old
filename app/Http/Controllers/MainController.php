@@ -14,9 +14,6 @@ class MainController extends Controller
 {
     public function __invoke(): View
     {
-
-//        Dorama::query()->find(24)->delete();
-
         $animes = Cache::rememberForever('main_animes', function () {
             return Anime::query()
                 ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])

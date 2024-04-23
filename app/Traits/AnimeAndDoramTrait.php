@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Country;
+use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Rating;
 use App\Models\Studio;
@@ -36,6 +37,11 @@ trait AnimeAndDoramTrait
     public function ratings(): MorphMany
     {
         return $this->morphMany(Rating::class, 'ratingable');
+    }
+
+    public function favorites(): MorphMany
+    {
+        return $this->morphMany(Favorite::class, 'favoriteable');
     }
 
 }

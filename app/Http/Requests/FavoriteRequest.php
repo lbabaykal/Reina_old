@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class RatingRequest extends FormRequest
+class FavoriteRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -20,7 +20,10 @@ class RatingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'assessment' => ['required', 'numeric', 'between:0,10'],
+            'folder' => ['required', 'numeric',
+                Rule::exists('folders', 'id')
+                    ->whereIn('user_id', [0, auth()->id()])
+            ],
         ];
     }
 

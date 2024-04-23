@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Rating extends Model
+class Favorite extends Model
 {
     use HasFactory;
 
@@ -15,12 +15,12 @@ class Rating extends Model
 
     protected $fillable = [
         'user_id',
-        'rating_type',
-        'rating_id',
-        'assessment',
+        'folder_id',
+        'favoriteable_type',
+        'favoriteable_id',
     ];
 
-    public function ratingable(): MorphTo
+    public function favoriteable(): MorphTo
     {
         return $this->morphTo();
     }
@@ -30,13 +30,14 @@ class Rating extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeRatingAnime($query)
+    public function scopeApplyFavoriteFilter($query, $data)
     {
-        return $query->where('ratingable_type', Anime::class);
+        return $query->where('favoriteable_type', $data);
     }
 
-    public function scopeRatingDorama($query)
+    public function folders()
     {
-        return $query->where('ratingable_type', Dorama::class);
+        return $this->belongsTo(Folder::class);
     }
+
 }

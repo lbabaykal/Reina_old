@@ -6,14 +6,27 @@ use App\Models\Country;
 use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Rating;
+use App\Models\Scopes\PublishedScope;
 use App\Models\Studio;
 use App\Models\Type;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 trait AnimeAndDoramTrait
 {
+
+    use HasSlug;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new PublishedScope());
+    }
+
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
@@ -42,6 +55,18 @@ trait AnimeAndDoramTrait
     public function favorites(): MorphMany
     {
         return $this->morphMany(Favorite::class, 'favoriteable');
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['title_ru'])
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 
 }

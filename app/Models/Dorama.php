@@ -6,14 +6,11 @@ use App\Traits\AnimeAndDoramTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class Dorama extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use HasSlug;
     use AnimeAndDoramTrait;
 
     protected $fillable = [
@@ -41,15 +38,4 @@ class Dorama extends Model
         'is_rating',
     ];
 
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom(['title_ru'])
-            ->saveSlugsTo('slug');
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
 }

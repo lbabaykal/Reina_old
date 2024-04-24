@@ -3,18 +3,14 @@
 namespace App\Models;
 
 use App\Traits\AnimeAndDoramTrait;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class Anime extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use HasSlug;
     use AnimeAndDoramTrait;
 
     protected $fillable = [
@@ -41,17 +37,5 @@ class Anime extends Model
         'is_comment',
         'is_rating',
     ];
-
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom(['title_ru'])
-            ->saveSlugsTo('slug');
-    }
-
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
-    }
 
 }

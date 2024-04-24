@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\AgeRatingEnum;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AnimeRequest;
+use App\Http\Requests\AnimeStoreRequest;
+use App\Http\Requests\AnimeUpdateRequest;
 use App\Models\Anime;
 use App\Models\Country;
 use App\Models\Genre;
@@ -22,7 +23,9 @@ class AnimeAdminController extends Controller
 
     public function index(): View
     {
-        $animes = Anime::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id'])
+        $animes = Anime::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id'])
             ->with('type')
             ->with('country')
             ->latest('updated_at')
@@ -50,13 +53,18 @@ class AnimeAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function store(AnimeRequest $request, AnimeServices $animeServices): RedirectResponse
+    public function store(AnimeStoreRequest $request, AnimeServices $animeServices): RedirectResponse
     {
         return $animeServices->store($request);
     }
 
-    public function edit(Anime $anime): View
+    public function edit($animeSlug): View
     {
+        $anime = Anime::query()
+            ->withoutGlobalScopes()
+            ->where('slug', $animeSlug)
+            ->firstOrFail();
+
         $types = Type::all();
         $genres = Genre::all();
         $studios = Studio::all();
@@ -74,14 +82,23 @@ class AnimeAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function update(AnimeRequest $request, Anime $anime, AnimeServices $animeServices): RedirectResponse
+    public function update(Request $request, $animeSlug, AnimeServices $animeServices): RedirectResponse
     {
+        $anime = Anime::query()
+            ->withoutGlobalScopes()
+            ->where('slug', $animeSlug)
+            ->firstOrFail();
+        $request->validate((new AnimeUpdateRequest())->rules($anime->id), (new AnimeUpdateRequest())->messages());
+
         return $animeServices->update($request, $anime);
     }
 
-    public function restore($anime): RedirectResponse
+    public function restore($animeSlug): RedirectResponse
     {
-        $anime = Anime::withTrashed()->where('slug', $anime)->firstOrFail();
+        $anime = Anime::withTrashed()
+            ->withoutGlobalScopes()
+            ->where('slug', $animeSlug)
+            ->firstOrFail();
         $anime->restore();
 
         return redirect()->route('admin.anime.index')->with('message', "Аниме {$anime->title_ru} восстановлено.");
@@ -89,7 +106,9 @@ class AnimeAdminController extends Controller
 
     public function draft(): View
     {
-        $animes = Anime::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $animes = Anime::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::DRAFT)
@@ -97,12 +116,14 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('anime', $animes);
+        return view('admin.anime.index')->with('animes', $animes);
     }
 
     public function published(): View
     {
-        $animes = Anime::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $animes = Anime::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::PUBLISHED)
@@ -115,7 +136,9 @@ class AnimeAdminController extends Controller
 
     public function archive(): View
     {
-        $animes = Anime::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $animes = Anime::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::ARCHIVE)
@@ -128,7 +151,9 @@ class AnimeAdminController extends Controller
 
     public function deleted(): View
     {
-        $animes = Anime::query()->onlyTrashed()
+        $animes = Anime::query()
+            ->onlyTrashed()
+            ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')

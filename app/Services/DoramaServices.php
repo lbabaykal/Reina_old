@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Dorama;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +69,7 @@ class DoramaServices
         }
     }
 
-    public function update(Request $request, Dorama $dorama): RedirectResponse
+    public function update(Request $request, Model $dorama): RedirectResponse
     {
         $imageServices = new ImageServices();
 

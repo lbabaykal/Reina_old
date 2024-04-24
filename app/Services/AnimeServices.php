@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Anime;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -68,7 +69,7 @@ class AnimeServices
         }
     }
 
-    public function update(Request $request, Anime $anime): RedirectResponse
+    public function update(Request $request, Model $anime): RedirectResponse
     {
         $imageServices = new ImageServices();
 

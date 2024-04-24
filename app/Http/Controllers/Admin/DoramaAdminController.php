@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\AgeRatingEnum;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DoramaRequest;
+use App\Http\Requests\DoramaStoreRequest;
+use App\Http\Requests\DoramaUpdateRequest;
 use App\Models\Country;
 use App\Models\Dorama;
 use App\Models\Genre;
@@ -22,7 +23,9 @@ class DoramaAdminController extends Controller
 
     public function index(): View
     {
-        $doramas = Dorama::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id'])
+        $doramas = Dorama::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id'])
             ->with('type')
             ->with('country')
             ->latest('updated_at')
@@ -50,13 +53,18 @@ class DoramaAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function store(DoramaRequest $request, DoramaServices $doramaServices): RedirectResponse
+    public function store(DoramaStoreRequest $request, DoramaServices $doramaServices): RedirectResponse
     {
         return $doramaServices->store($request);
     }
 
-    public function edit(Dorama $dorama): View
+    public function edit($doramaSlug): View
     {
+        $dorama = Dorama::query()
+            ->withoutGlobalScopes()
+            ->where('slug', $doramaSlug)
+            ->firstOrFail();
+
         $types = Type::all();
         $genres = Genre::all();
         $studios = Studio::all();
@@ -74,14 +82,23 @@ class DoramaAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function update(DoramaRequest $request, Dorama $dorama, DoramaServices $doramaServices): RedirectResponse
+    public function update(Request $request, $doramaSlug, DoramaServices $doramaServices): RedirectResponse
     {
+        $dorama = Dorama::query()
+            ->withoutGlobalScopes()
+            ->where('slug', $doramaSlug)
+            ->firstOrFail();
+        $request->validate((new DoramaUpdateRequest())->rules($dorama->id), (new DoramaUpdateRequest())->messages());
+
         return $doramaServices->update($request, $dorama);
     }
 
-    public function restore($dorama): RedirectResponse
+    public function restore($doramaSlug): RedirectResponse
     {
-        $dorama = Dorama::withTrashed()->where('slug', $dorama)->firstOrFail();
+        $dorama = Dorama::withTrashed()
+            ->withoutGlobalScopes()
+            ->where('slug', $doramaSlug)
+            ->firstOrFail();
         $dorama->restore();
 
         return redirect()->route('admin.dorama.index')->with('message', "Дорама {$dorama->title_ru} восстановлена.");
@@ -89,7 +106,9 @@ class DoramaAdminController extends Controller
 
     public function draft(): View
     {
-        $doramas = Dorama::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $doramas = Dorama::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::DRAFT)
@@ -102,7 +121,9 @@ class DoramaAdminController extends Controller
 
     public function published(): View
     {
-        $doramas = Dorama::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $doramas = Dorama::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::PUBLISHED)
@@ -115,7 +136,9 @@ class DoramaAdminController extends Controller
 
     public function archive(): View
     {
-        $doramas = Dorama::query()->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
+        $doramas = Dorama::query()
+            ->withoutGlobalScopes()
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')
             ->where('status', StatusEnum::ARCHIVE)
@@ -128,7 +151,9 @@ class DoramaAdminController extends Controller
 
     public function deleted(): View
     {
-        $doramas = Dorama::query()->onlyTrashed()
+        $doramas = Dorama::query()
+            ->onlyTrashed()
+            ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
             ->with('country')

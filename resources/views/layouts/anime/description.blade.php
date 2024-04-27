@@ -77,7 +77,9 @@
                             <dt class="text-gray-400 text-xl">{{ __('Жанр') }}</dt>
                             <dd>
                                 @foreach($anime->genres as $genre)
-                                    <a href="/" class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide">{{ $genre->title_ru }}</a>
+                                    <a href="{{ route('search', ['genre[]' => $genre->id]) }}"
+                                       class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide"
+                                    >{{ $genre->title_ru }}</a>
                                     @if($loop->last === false)
                                         <span class="text-red-500 text-xl">•</span>
                                     @endif
@@ -90,7 +92,9 @@
                             <dt class="text-gray-400 text-xl">{{ __('Студия') }}</dt>
                             <dd>
                                 @foreach($anime->studios as $studio)
-                                    <a href="/" class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide">{{ $studio->title }}</a>
+                                    <a href="{{ route('search', ['studio[]' => $studio->id]) }}"
+                                       class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide"
+                                    >{{ $studio->title }}</a>
                                     @if($loop->last === false)
                                         <span class="text-red-500 text-xl">•</span>
                                     @endif

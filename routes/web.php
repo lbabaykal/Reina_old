@@ -13,6 +13,7 @@ use App\Http\Controllers\Folder\AnimeFolderController;
 use App\Http\Controllers\Folder\DoramaFolderController;
 use App\Http\Controllers\Folder\FolderController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,6 +39,9 @@ Route::middleware([
 //========================================================================================
 
 Route::get('/', MainController::class)->name('main');
+Route::get('/search', SearchController::class)->name('search');
+Route::get('/search_anime', [SearchController::class, 'anime'])->name('search.anime');
+Route::get('/search_dorama', [SearchController::class, 'dorama'])->name('search.dorama');
 
 // ====ANIME====
 Route::prefix('anime')->name('anime.')->group(function () {
@@ -91,7 +95,7 @@ Route::middleware('auth')
     ->group(function () {
         Route::get('/', AdminPanelController::class)->name('index');
 
-        Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy']);
+        Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy',]);
         Route::prefix('anime')->name('anime.')->group(function () {
             Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');
             Route::get('/published', [AnimeAdminController::class, 'published'])->name('published');

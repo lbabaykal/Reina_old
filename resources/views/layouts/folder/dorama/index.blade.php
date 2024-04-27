@@ -11,13 +11,18 @@
         <div class="flex flex-row w-full">
             <div class="min-w-[260] mx-2 select-none">
                 <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_#8b00ff]">
-                    <div class="w-full h-[40] flex flex-row
+                    <div class="w-full h-[40] flex flex-row group
                         @if(request()->is('folders/doramas')) bg-blackActive @endif
                     ">
                         <a href="{{ route('folders.doramas.index') }}"
-                           class="w-full h-full text-xl pl-4 flex items-center
-                                  hover:hover:bg-gray-100 hover:text-black">
-                            Все - {{ auth()->user()->favoriteDoramas()->count() }}
+                           class="w-full h-full text-xl flex items-center justify-between truncate
+                                      group-hover:bg-gray-100 group-hover:text-black">
+                                <span class="px-3 truncate">
+                                    {{ __('Все') }}
+                                </span>
+                                <span class="px-2">
+                                    {{ auth()->user()->favoriteDoramas()->count() }}
+                                </span>
                         </a>
                         <button data-modal-target="dorama-folder-create-modal"
                                 data-modal-toggle="dorama-folder-create-modal"
@@ -59,6 +64,9 @@
                 @each('layouts.dorama.card', $doramas, 'dorama')
             </div>
         </div>
+
+            {{ $doramas->links() }}
+
     </section>
 @endsection
 

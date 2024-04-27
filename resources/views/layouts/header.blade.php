@@ -2,7 +2,7 @@
     <nav class="mx-auto flex items-center justify-between h-[60px] px-[60]">
         <a href="/"
            class="logo-shadow text-3xl font-bold text-white flex flex-row content-center items-center select-none">
-            Reina<img src="{{ asset('assets/lotus.png') }}" class="w-[40] inline-block ml-2">
+            Reina<img src="{{ asset('assets/lotus.png') }}" class="w-[40] inline-block ml-2"  alt="Reina">
         </a>
 
 {{--        <form action="{{ route('article.filter_article') }}"--}}

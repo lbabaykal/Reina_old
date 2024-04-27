@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\StatusEnum;
 use App\Models\Anime;
 use App\Models\Dorama;
 use App\Reina;

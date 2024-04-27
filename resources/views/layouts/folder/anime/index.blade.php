@@ -11,13 +11,18 @@
         <div class="flex flex-row w-full">
             <div class="min-w-[260] mx-2 select-none">
                 <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_#f00]">
-                    <div class="w-full h-[40] flex flex-row
+                    <div class="w-full h-[40] flex flex-row group
                         @if(request()->is('folders/animes')) bg-blackActive @endif
                     ">
                         <a href="{{ route('folders.animes.index') }}"
-                           class="w-full h-full text-xl pl-4 flex items-center
-                                  hover:hover:bg-gray-100 hover:text-black">
-                            Все - {{ auth()->user()->favoriteAnimes()->count() }}
+                           class="w-full h-full text-xl flex items-center justify-between truncate
+                                      group-hover:bg-gray-100 group-hover:text-black">
+                                <span class="px-3 truncate">
+                                    {{ __('Все') }}
+                                </span>
+                            <span class="px-2">
+                                    {{ auth()->user()->favoriteAnimes()->count() }}
+                                </span>
                         </a>
                         <button data-modal-target="anime-folder-create-modal"
                                 data-modal-toggle="anime-folder-create-modal"

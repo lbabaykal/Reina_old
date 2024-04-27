@@ -28,7 +28,11 @@
                 <div class="w-full">
                     <span class="my-1 text-gray-300 flex flex-row justify-center items-center content-center">
                          @foreach($anime->genres as $genre)
-                            <a href="/" class="underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide mx-1">{{ $genre->title_ru }}</a>
+                            <a href="{{ route('search', ['genre[]' => $genre->id]) }}"
+                               class="underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide mx-1"
+                            >
+                                {{ $genre->title_ru }}
+                            </a>
                              @if($loop->last === false)
                                 <span class="text-red-500 text-xl">•</span>
                              @endif
@@ -45,10 +49,22 @@
                         </div>
                     </a>
 
-                    <button data-modal-target="anime-rate-modal"
-                            data-modal-toggle="anime-rate-modal"
-                            type="button"
-                            class="group block bg-gray-600/80 hover:bg-gray-500 p-2.5 rounded mx-1"
+                    <div data-popover
+                         id="rate-popover-hover"
+                         role="tooltip"
+                         class="absolute z-10 invisible inline-block text-amber-400 bg-black border border-gray-500 transition-opacity duration-300 rounded shadow-sm opacity-0">
+                        <div class="px-4 py-2">
+                            Оценить
+                        </div>
+                        <div data-popper-arrow></div>
+                    </div>
+                    <button
+                        data-popover-target="rate-popover-hover"
+                        data-popover-trigger="hover"
+                        data-modal-target="anime-rate-modal"
+                        data-modal-toggle="anime-rate-modal"
+                        type="button"
+                        class="group block bg-gray-600/80 hover:bg-gray-500 p-2.5 rounded mx-1"
                     >
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor"
                              class="w-7 h-7 stroke-amber-400 group-hover:fill-amber-400
@@ -58,10 +74,23 @@
                         </svg>
                     </button>
 
-                    <button data-modal-target="anime-folders-modal"
-                            data-modal-toggle="anime-folders-modal"
-                            type="button"
-                            class="group block bg-gray-600/80 hover:bg-gray-500 p-2.5 rounded mx-1"
+
+                    <div data-popover
+                         id="folders-popover-hover"
+                         role="tooltip"
+                         class="absolute z-10 invisible inline-block text-red-500 bg-black border border-gray-500 transition-opacity duration-300 rounded shadow-sm opacity-0">
+                        <div class="px-4 py-2">
+                            Добавить в избранное
+                        </div>
+                        <div data-popper-arrow></div>
+                    </div>
+                    <button
+                        data-popover-target="folders-popover-hover"
+                        data-popover-trigger="hover"
+                        data-modal-target="anime-folders-modal"
+                        data-modal-toggle="anime-folders-modal"
+                        type="button"
+                        class="group block bg-gray-600/80 hover:bg-gray-500 p-2.5 rounded mx-1"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                              class="w-7 h-7 stroke-red-500 group-hover:fill-red-500

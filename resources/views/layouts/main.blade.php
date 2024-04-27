@@ -2,12 +2,10 @@
 @section('title', config('app.name') . ' - Главная')
 @section('content')
     <section class="margin-content">
-        <div class="w-full py-1 my-2 select-none flex flex-row items-center justify-center">
-            <a href="{{ route('anime.index') }}" class="font-bold group">
+        <div class="py-1 my-2 select-none flex flex-row items-center justify-center">
+            <a href="{{ route('anime.index') }}" class="font-bold group flex flex-row items-center justify-center">
                 <span class="text-red-500 text-3xl">❮</span>
-                <span class="group-hover:text-red-500 text-4xl px-3 duration-300">
-                АНИМЕ
-            </span>
+                <span class="group-hover:text-red-500 text-4xl px-3 duration-300">АНИМЕ</span>
                 <span class="text-red-500 text-3xl">❯</span>
             </a>
         </div>
@@ -16,12 +14,10 @@
             @each('layouts.anime.card', $animes, 'anime')
         </div>
 
-        <div class="w-full py-1 my-2 select-none flex flex-row items-center justify-center">
-            <a href="{{ route('dorama.index') }}" class="font-bold group">
+        <div class="py-1 my-2 select-none flex flex-row items-center justify-center">
+            <a href="{{ route('dorama.index') }}" class="font-bold group flex flex-row items-center justify-center">
                 <span class="text-violet-500 text-3xl">❮</span>
-                <span class="group-hover:text-violet-500 text-4xl px-3 duration-300">
-                    ДОРАМЫ
-                </span>
+                <span class="group-hover:text-violet-500 text-4xl px-3 duration-300">ДОРАМЫ</span>
                 <span class="text-violet-500 text-3xl">❯</span>
             </a>
         </div>

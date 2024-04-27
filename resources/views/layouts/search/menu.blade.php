@@ -15,7 +15,7 @@
                    name="title"
                    placeholder="Поиск по ключевым словам..."
                    value="{{ request('title') }}"
-                   class="w-[600] bg-blackSimple text-white border-x-0 border-t-0 duration-200 transition text-center focus:ring-0 focus:border-b-love"
+                   class="w-[600] bg-blackSimple text-white border-x-0 border-t-0 duration-200 transition text-center focus:ring-0 focus:border-b-love hover:bg-blackActive focus:bg-blackActive"
             />
             <button form="search"
                     type="submit"
@@ -35,16 +35,12 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
             </svg>
-
             {{ __('Фильтры') }}
             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
             </svg>
         </button>
-
     </nav>
-
-
 
     <div id="mega-menu-full-dropdown"
          class="bg-blackSimple border-blackActive shadow-sm border-y hidden pt-3 mt-2"
@@ -78,7 +74,7 @@
                             </div>
                         </li>
                     @endforeach
-                </ul >
+                </ul>
             </div>
 
             <div class="bg-blackSimple text-white w-60 overflow-hidden select-none mx-5">
@@ -188,10 +184,5 @@
             </div>
         </form>
     </div>
-
-
-
-
-
-
+    
 </div>

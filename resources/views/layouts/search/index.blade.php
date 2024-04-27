@@ -27,7 +27,7 @@
                     <span class="text-violet-500">❮</span>
                     <span class="px-3 group-hover:text-violet-500 duration-300">НАЙДЕНО</span>
                     <span class="text-violet-500 text-4xl">{{ $doramas->total() }}</span>
-                    <span class="px-3 group-hover:text-violet-500 duration-300">ДОРАМ</span>
+                    <span class="px-3 group-hover:text-violet-500 duration-300">ДОРАМА</span>
                     <span class="text-violet-500">❯</span>
                 </a>
             </div>

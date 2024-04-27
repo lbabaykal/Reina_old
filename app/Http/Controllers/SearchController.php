@@ -23,15 +23,12 @@ use Illuminate\View\View;
 class SearchController extends Controller
 {
 
-    public function __invoke(Request $request): View
+    public function __invoke(): View
     {
-
-        $animes = Pipeline::send(
-            Anime::query()
-//                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
+        $animes = Pipeline::send(Anime::query()
+                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
                 ->limit(Reina::COUNT_ARTICLES_SEARCH)
-                ->latest('updated_at')
-        )
+                ->latest('updated_at'))
             ->through([
                 TitleFilter::class,
                 TypeFilter::class,
@@ -70,7 +67,7 @@ class SearchController extends Controller
     }
 
 
-    public function anime(Request $request): View
+    public function anime(): View
     {
         $animes = Pipeline::send(
             Anime::query()
@@ -96,7 +93,7 @@ class SearchController extends Controller
             ->with('animes', $animes->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
     }
 
-    public function dorama(Request $request): View
+    public function dorama(): View
     {
         $doramas = Pipeline::send(
             Dorama::query()

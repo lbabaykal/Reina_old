@@ -15,11 +15,11 @@
                    name="title"
                    placeholder="Поиск по ключевым словам..."
                    value="{{ request('title') }}"
-                   class="w-[600] bg-blackSimple text-white border-x-0 border-t-0 duration-200 transition text-center focus:ring-0 focus:border-b-love hover:bg-blackActive focus:bg-blackActive"
+                   class="w-[600] bg-blackSimple text-white border-x-0 border-t-0 duration-200 transition text-center rounded-s-md focus:ring-0 focus:border-b-love hover:bg-blackActive focus:bg-blackActive"
             />
             <button form="search"
                     type="submit"
-                    class="px-5 h-full text-love border border-love hover:bg-love hover:text-white"
+                    class="px-5 h-full text-love border border-love hover:bg-love hover:text-white rounded-e-md"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 24 24" fill="currentColor">
                     <path d='M0 0h24v24H0V0z' fill='none'/>
@@ -182,7 +182,86 @@
                     @endforeach
                 </ul>
             </div>
+
+
+            <div class="bg-blackSimple text-white w-60 overflow-hidden select-none mx-3">
+                <div class="text-center font-bold">
+                    {{ __('Год') }}
+                </div>
+
+                <div class="px-2 py-2">
+                    <div class="flex mb-4">
+                        <div class="py-1.5 px-5 text-white rounded-s-md bg-gray-500">
+                            ОТ
+                        </div>
+                        <input id="year_fromInput"
+                               name="year_from"
+                               value="{{ request('year_from') }}"
+                               type="number"
+                               min="1970"
+                               max="2030"
+                               placeholder="Введите год"
+                               class="py-1.5 w-full text-center text-white bg-blackActive rounded-e-md border-none focus:ring-love"
+                        >
+                    </div>
+                    <div class="relative">
+                        <label for="year_fromRange" class="sr-only"></label>
+                        <input id="year_fromRange"
+                               type="range"
+                               value="{{ request('year_from') }}"
+                               min="1970"
+                               max="2030"
+                               oninput="updateYearFrom()"
+                               class="w-full h-2.5 bg-white rounded-lg appearance-none cursor-ew-resize range-sm in-range:bg-gray-500"
+                        >
+                        <span class="text-sm text-gray-300 absolute start-0 -bottom-6">1970</span>
+                        <span class="text-sm text-gray-300 absolute end-0 -bottom-6">2030</span>
+                    </div>
+                </div>
+
+                <div class="px-2 py-2 mt-10">
+                    <div class="flex mb-4">
+                        <div class="py-1.5 px-5 text-white rounded-s-md bg-gray-500">
+                            ДО
+                        </div>
+                        <input id="year_toInput"
+                               name="year_to"
+                               value="{{ request('year_to') }}"
+                               type="number"
+                               min="1970"
+                               max="2030"
+                               placeholder="Введите год"
+                               class="py-1.5 w-full text-center text-white bg-blackActive rounded-e-md border-none focus:ring-love"
+                        >
+                    </div>
+                    <div class="relative">
+                        <label for="year_toRange" class="sr-only"></label>
+                        <input id="year_toRange"
+                               type="range"
+                               value="{{ request('year_to') }}"
+                               min="1970"
+                               max="2030"
+                               oninput="updateYearTo()"
+                               class="w-full h-2.5 bg-gray-500 rounded-lg appearance-none cursor-ew-resize range-sm"
+                        >
+                        <span class="text-sm text-gray-300 absolute start-0 -bottom-6">1970</span>
+                        <span class="text-sm text-gray-300 absolute end-0 -bottom-6">2030</span>
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
-    
+
 </div>
+
+
+<script>
+    function updateYearFrom() {
+        document.getElementById('year_fromInput').value = document.getElementById('year_fromRange').value;
+    }
+
+    function updateYearTo() {
+        document.getElementById('year_toInput').value = document.getElementById('year_toRange').value;
+    }
+</script>

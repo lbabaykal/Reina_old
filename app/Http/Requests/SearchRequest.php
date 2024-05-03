@@ -34,6 +34,9 @@ class SearchRequest extends FormRequest
 
                 'country' => ['nullable', 'array'],
                 'country.*' => ['nullable', 'integer'],
+
+                'year_from' => ['nullable', 'integer'],
+                'year_to' => ['nullable', 'integer'],
             ];
     }
 

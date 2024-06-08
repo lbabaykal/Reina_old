@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="w-full flex flex-row justify-center items-center content-center my-2">
-                    <a href="/" class="relative group p-0.5 mx-1">
+                    <a href="{{ route('anime.watch', $anime) }}" class="relative group p-0.5 mx-1">
                         <div class="absolute inset-0 group-hover:bg-gradient-to-r from-orange-500 via-red-500 to-violet-600 rounded-lg blur-md"></div>
                         <div class="px-12 py-3 rounded relative transition duration-300 flex flex-row justify-center items-center text-white font-bold bg-gradient-to-r from-orange-500 via-red-500 to-violet-600">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 inline-block"><path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" /></svg>

@@ -15,15 +15,15 @@ class MainController extends Controller
     {
         $animes = Cache::rememberForever('main_animes', function () {
             return Anime::query()
-                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
+                ->select(['id', 'slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
                 ->limit(Reina::COUNT_ARTICLES_MAIN)
                 ->latest('updated_at')
                 ->get();
         });
-
+        
         $doramas = Cache::rememberForever('main_doramas', function () {
             return Dorama::query()
-                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
+                ->select(['id', 'slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
                 ->limit(Reina::COUNT_ARTICLES_MAIN)
                 ->latest('updated_at')
                 ->get();

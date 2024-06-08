@@ -13,7 +13,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\User::class)->constrained();
             $table->morphs('ratingable');
-            $table->unsignedSmallInteger('assessment');
+            $table->unsignedInteger('assessment');
         });
     }
 

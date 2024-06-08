@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\AnimeObserver;
 use App\Traits\AnimeAndDoramTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[ObservedBy([AnimeObserver::class])]
 class Anime extends Model
 {
     use HasFactory;
@@ -37,5 +41,12 @@ class Anime extends Model
         'is_comment',
         'is_rating',
     ];
+
+    public $timestamps = false;
+
+    public function animeEpisodes(): HasMany
+    {
+        return $this->hasMany(AnimeEpisode::class);
+    }
 
 }

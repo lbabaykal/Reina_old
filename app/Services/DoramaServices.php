@@ -33,7 +33,7 @@ class DoramaServices
         $studios = $request->input('studios') ?? null;
 
         $dorama->age_rating = $request->input('age_rating');
-        $dorama->episodes_released = $request->input('episodes_released');
+        $dorama->episodes_released = 0;
         $dorama->episodes_total = $request->input('episodes_total');
         $dorama->duration = $request->input('duration');
         $dorama->release = $request->date('release');
@@ -90,10 +90,9 @@ class DoramaServices
         $studios = $request->input('studios') ?? null;
 
         $dorama->age_rating = $request->input('age_rating');
-        $dorama->episodes_released = $request->input('episodes_released');
         $dorama->episodes_total = $request->input('episodes_total');
         $dorama->duration = $request->input('duration');
-        $dorama->release = $request->date('release');
+        $dorama->release = $request->input('release');
         $dorama->description = $request->input('description');
         $dorama->user_id = auth()->id();
         $dorama->status = $request->input('status');

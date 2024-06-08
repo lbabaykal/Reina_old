@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AdminPanel;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,8 +21,8 @@ class AnimeStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'poster' => ['nullable', File::image()->min('1kb')->max('2mb')],
-            'cover' => ['nullable', File::image()->min('1kb')->max('2mb')],
+            'poster' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
+            'cover' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
 
             'title_org' => ['required', 'string', 'min:1', 'max:255', 'unique:animes,title_org'],
             'title_ru' => ['required', 'string', 'min:1', 'max:255',  'unique:animes,title_ru'],
@@ -40,7 +40,7 @@ class AnimeStoreRequest extends FormRequest
 
             'age_rating' => ['required', Rule::in(\App\Enums\AgeRatingEnum::cases())],
 
-            'episodes_released' => ['required', 'integer', 'lte:episodes_total'],
+//            'episodes_released' => ['required', 'integer', 'lte:episodes_total'],
             'episodes_total' => ['required', 'integer'],
             'duration' => ['required', 'integer'],
             'release' => ['required', 'date', 'after:1980-01-01|', 'before:2100-01-01'],

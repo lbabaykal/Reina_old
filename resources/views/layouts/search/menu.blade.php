@@ -28,8 +28,8 @@
             </button>
         </div>
 
-        <button id="mega-menu-full-dropdown-button"
-                data-collapse-toggle="mega-menu-full-dropdown"
+        <button id="filters-dropdown-button"
+                data-collapse-toggle="filters-dropdown"
                 class="flex items-center justify-between w-[200] py-2 px-3 font-medium text-white bg-blackSimple border-b border-love hover:bg-blackActive"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -42,7 +42,7 @@
         </button>
     </nav>
 
-    <div id="mega-menu-full-dropdown"
+    <div id="filters-dropdown"
          class="bg-blackSimple border-blackActive shadow-sm border-y hidden pt-3 mt-2"
     >
         <form id="search" method="GET" class="flex flex-row justify-center">
@@ -87,8 +87,31 @@
                             @checked(request()->exists('strict_genre'))
                         >
                         <span class="relative w-9 h-5 bg-red-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-lime-300"></span>
+                        <button data-tooltip-target="tooltip-genre"
+                                data-tooltip-placement="right"
+                                type="button"
+                                class="ml-3">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-5 h-5"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                            </svg>
+                        </button>
                     </label>
                 </div>
+
+                <div id="tooltip-genre"
+                     role="tooltip"
+                     class="absolute z-50 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip border border-gray-500"
+                >
+                    {{ __('ВКЛ: Строгий поиск.') }}<br>
+                    {{ __('ВЫКЛ: Нестрогий поиск.') }}
+                </div>
+
                 <ul class="min-h-20 max-h-72 px-2 py-2 overflow-y-auto">
                     @foreach($genres as $genre)
                         <li>
@@ -118,15 +141,39 @@
             <div class="bg-blackSimple text-white w-60 overflow-hidden select-none mx-5">
                 <div class="font-bold flex flex-row justify-center items-center">
                     {{ __('Студия') }}
-                    <label class="inline-flex items-center cursor-pointer ms-3 pb-2">
+                    <label class="inline-flex items-center cursor-pointer ms-3">
                         <input type="checkbox"
                                name="strict_studio"
                                class="sr-only peer"
                             @checked(request()->exists('strict_studio'))
                         >
                         <span class="relative w-9 h-5 bg-red-300 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-lime-300"></span>
+
+                        <button data-tooltip-target="tooltip-studio"
+                                data-tooltip-placement="right"
+                                type="button"
+                                class="ml-3">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 class="w-5 h-5"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                            </svg>
+                        </button>
                     </label>
                 </div>
+
+                <div id="tooltip-studio"
+                     role="tooltip"
+                     class="absolute z-50 invisible px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip border border-gray-500"
+                >
+                    {{ __('ВКЛ: Строгий поиск.') }}<br>
+                    {{ __('ВЫКЛ: Нестрогий поиск.') }}
+                </div>
+
                 <ul class="min-h-20 max-h-72  px-2 py-2 overflow-y-auto">
                     @foreach($studios as $studio)
                         <li>

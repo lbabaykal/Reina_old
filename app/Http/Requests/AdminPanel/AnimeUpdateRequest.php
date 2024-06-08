@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AdminPanel;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
-class DoramaStoreRequest extends FormRequest
+class AnimeUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,15 +18,15 @@ class DoramaStoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules(int $id): array
     {
         return [
-            'poster' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
-            'cover' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
+            'poster' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
+            'cover' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
 
-            'title_org' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_org'],
-            'title_ru' => ['required', 'string', 'min:1', 'max:255',  'unique:doramas,title_ru'],
-            'title_en' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_en'],
+            'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($id)],
+            'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('animes')->ignore($id)],
+            'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($id)],
 
             'type' => ['required', 'integer', 'exists:types,id'],
 
@@ -39,7 +40,7 @@ class DoramaStoreRequest extends FormRequest
 
             'age_rating' => ['required', Rule::in(\App\Enums\AgeRatingEnum::cases())],
 
-            'episodes_released' => ['required', 'integer', 'lte:episodes_total'],
+//            'episodes_released' => ['required', 'integer', 'lte:episodes_total'],
             'episodes_total' => ['required', 'integer'],
             'duration' => ['required', 'integer'],
             'release' => ['required', 'date', 'after:1980-01-01|', 'before:2100-01-01'],

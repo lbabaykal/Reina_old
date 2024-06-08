@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AdminPanel;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
-class AnimeUpdateRequest extends FormRequest
+class DoramaUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -21,12 +21,12 @@ class AnimeUpdateRequest extends FormRequest
     public function rules(int $id): array
     {
         return [
-            'poster' => ['nullable', File::image()->min('1kb')->max('2mb')],
-            'cover' => ['nullable', File::image()->min('1kb')->max('2mb')],
+            'poster' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
+            'cover' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
 
-            'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($id)],
-            'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('animes')->ignore($id)],
-            'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('animes')->ignore($id)],
+            'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($id)],
+            'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('doramas')->ignore($id)],
+            'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($id)],
 
             'type' => ['required', 'integer', 'exists:types,id'],
 

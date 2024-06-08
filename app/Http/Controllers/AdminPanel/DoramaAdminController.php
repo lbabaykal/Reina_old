@@ -1,38 +1,38 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\AdminPanel;
 
 use App\Enums\AgeRatingEnum;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AnimeStoreRequest;
-use App\Http\Requests\AnimeUpdateRequest;
-use App\Models\Anime;
+use App\Http\Requests\AdminPanel\DoramaStoreRequest;
+use App\Http\Requests\AdminPanel\DoramaUpdateRequest;
 use App\Models\Country;
+use App\Models\Dorama;
 use App\Models\Genre;
 use App\Models\Studio;
 use App\Models\Type;
 use App\Reina;
-use App\Services\AnimeServices;
+use App\Services\DoramaServices;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class AnimeAdminController extends Controller
+class DoramaAdminController extends Controller
 {
 
     public function index(): View
     {
-        $animes = Anime::query()
+        $doramas = Dorama::query()
             ->withoutGlobalScopes()
-            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id'])
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'episodes_released', 'episodes_total'])
             ->with('type')
             ->with('country')
             ->latest('updated_at')
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('animes', $animes);
+        return view('admin.dorama.index')->with('doramas', $doramas);
     }
 
     public function create(): View
@@ -44,7 +44,7 @@ class AnimeAdminController extends Controller
         $age_ratings = AgeRatingEnum::cases();
         $statuses = StatusEnum::cases();
 
-        return view('admin.anime.create')
+        return view('admin.dorama.create')
             ->with('types', $types)
             ->with('genres', $genres)
             ->with('studios', $studios)
@@ -53,16 +53,16 @@ class AnimeAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function store(AnimeStoreRequest $request, AnimeServices $animeServices): RedirectResponse
+    public function store(DoramaStoreRequest $request, DoramaServices $doramaServices): RedirectResponse
     {
-        return $animeServices->store($request);
+        return $doramaServices->store($request);
     }
 
-    public function edit($animeSlug): View
+    public function edit($doramaSlug): View
     {
-        $anime = Anime::query()
+        $dorama = Dorama::query()
             ->withoutGlobalScopes()
-            ->where('slug', $animeSlug)
+            ->where('slug', $doramaSlug)
             ->firstOrFail();
 
         $types = Type::all();
@@ -72,8 +72,8 @@ class AnimeAdminController extends Controller
         $age_ratings = AgeRatingEnum::cases();
         $statuses = StatusEnum::cases();
 
-        return view('admin.anime.edit')
-            ->with('anime', $anime)
+        return view('admin.dorama.edit')
+            ->with('dorama', $dorama)
             ->with('types', $types)
             ->with('genres', $genres)
             ->with('studios', $studios)
@@ -82,31 +82,31 @@ class AnimeAdminController extends Controller
             ->with('statuses', $statuses);
     }
 
-    public function update(Request $request, $animeSlug, AnimeServices $animeServices): RedirectResponse
+    public function update(Request $request, $doramaSlug, DoramaServices $doramaServices): RedirectResponse
     {
-        $anime = Anime::query()
+        $dorama = Dorama::query()
             ->withoutGlobalScopes()
-            ->where('slug', $animeSlug)
+            ->where('slug', $doramaSlug)
             ->firstOrFail();
-        $request->validate((new AnimeUpdateRequest())->rules($anime->id), (new AnimeUpdateRequest())->messages());
+        $request->validate((new DoramaUpdateRequest())->rules($dorama->id), (new DoramaUpdateRequest())->messages());
 
-        return $animeServices->update($request, $anime);
+        return $doramaServices->update($request, $dorama);
     }
 
-    public function restore($animeSlug): RedirectResponse
+    public function restore($doramaSlug): RedirectResponse
     {
-        $anime = Anime::withTrashed()
+        $dorama = Dorama::withTrashed()
             ->withoutGlobalScopes()
-            ->where('slug', $animeSlug)
+            ->where('slug', $doramaSlug)
             ->firstOrFail();
-        $anime->restore();
+        $dorama->restore();
 
-        return redirect()->route('admin.anime.index')->with('message', "Аниме {$anime->title_ru} восстановлено.");
+        return redirect()->route('admin.dorama.index')->with('message', "Дорама {$dorama->title_ru} восстановлена.");
     }
 
     public function draft(): View
     {
-        $animes = Anime::query()
+        $doramas = Dorama::query()
             ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
@@ -116,12 +116,12 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('animes', $animes);
+        return view('admin.dorama.index')->with('doramas', $doramas);
     }
 
     public function published(): View
     {
-        $animes = Anime::query()
+        $doramas = Dorama::query()
             ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
@@ -131,12 +131,12 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('animes', $animes);
+        return view('admin.dorama.index')->with('doramas', $doramas);
     }
 
     public function archive(): View
     {
-        $animes = Anime::query()
+        $doramas = Dorama::query()
             ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
             ->with('type')
@@ -146,12 +146,12 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.index')->with('animes', $animes);
+        return view('admin.dorama.index')->with('doramas', $doramas);
     }
 
     public function deleted(): View
     {
-        $animes = Anime::query()
+        $doramas = Dorama::query()
             ->onlyTrashed()
             ->withoutGlobalScopes()
             ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'status'])
@@ -161,6 +161,6 @@ class AnimeAdminController extends Controller
             ->paginate(Reina::COUNT_ADMIN_ITEMS)
             ->withQueryString();
 
-        return view('admin.anime.deleted')->with('animes', $animes);
+        return view('admin.dorama.deleted')->with('doramas', $doramas);
     }
 }

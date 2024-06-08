@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AdminPanel;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
-class DoramaUpdateRequest extends FormRequest
+class DoramaStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,15 +18,15 @@ class DoramaUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(int $id): array
+    public function rules(): array
     {
         return [
-            'poster' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
-            'cover' => ['nullable', 'mimes:jpeg,png', 'max:2048'],
+            'poster' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
+            'cover' => ['nullable', 'mimes:png,jpg', File::image()->min('1kb')->max('2mb')],
 
-            'title_org' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($id)],
-            'title_ru' => ['required', 'string', 'min:1', 'max:255',  Rule::unique('doramas')->ignore($id)],
-            'title_en' => ['required', 'string', 'min:1', 'max:255', Rule::unique('doramas')->ignore($id)],
+            'title_org' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_org'],
+            'title_ru' => ['required', 'string', 'min:1', 'max:255',  'unique:doramas,title_ru'],
+            'title_en' => ['required', 'string', 'min:1', 'max:255', 'unique:doramas,title_en'],
 
             'type' => ['required', 'integer', 'exists:types,id'],
 

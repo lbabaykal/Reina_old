@@ -61,7 +61,10 @@
                             Статус
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            Episodes
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Edit
                         </th>
                     </tr>
                     </thead>
@@ -82,6 +85,13 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{ $dorama->status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('admin.dorama.episodes.index', $dorama) }}"
+                                   class="hover:text-love"
+                                >
+                                    {{ $dorama->episodes_released }}/{{ $dorama->episodes_total }} эпизодов
+                                </a>
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.dorama.edit', $dorama) }}"

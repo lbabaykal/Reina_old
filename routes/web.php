@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminPanelController;
-use App\Http\Controllers\Admin\AnimeAdminController;
-use App\Http\Controllers\Admin\CountriesAdminController;
-use App\Http\Controllers\Admin\DoramaAdminController;
-use App\Http\Controllers\Admin\GenreAdminController;
-use App\Http\Controllers\Admin\StudiosAdminController;
-use App\Http\Controllers\Admin\TypeAdminController;
+use App\Http\Controllers\AdminPanel\AdminPanelController;
+use App\Http\Controllers\AdminPanel\AnimeAdminController;
+use App\Http\Controllers\AdminPanel\AnimeEpisodesAdminController;
+use App\Http\Controllers\AdminPanel\CountriesAdminController;
+use App\Http\Controllers\AdminPanel\DoramaAdminController;
+use App\Http\Controllers\AdminPanel\DoramaEpisodesAdminController;
+use App\Http\Controllers\AdminPanel\GenreAdminController;
+use App\Http\Controllers\AdminPanel\StudiosAdminController;
+use App\Http\Controllers\AdminPanel\TypeAdminController;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\DoramaController;
 use App\Http\Controllers\Folder\AnimeFolderController;
@@ -21,8 +23,6 @@ use Inertia\Inertia;
 //    return Inertia::render('Welcome', [
 //        'canLogin' => Route::has('login'),
 //        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
 //    ]);
 //});
 
@@ -46,6 +46,7 @@ Route::get('/search_dorama', [SearchController::class, 'dorama'])->name('search.
 // ====ANIME====
 Route::prefix('anime')->name('anime.')->group(function () {
     Route::get('/{anime:slug}', [AnimeController::class, 'show'])->name('show');
+    Route::get('/{anime:slug}/watch', [AnimeController::class, 'watch'])->name('watch');
     Route::get('/', [AnimeController::class, 'index'])->name('index');
 
     Route::middleware('auth')->group(function () {
@@ -57,6 +58,7 @@ Route::prefix('anime')->name('anime.')->group(function () {
 // ====DORAMA====
 Route::prefix('dorama')->name('dorama.')->group(function () {
     Route::get('/{dorama:slug}', [DoramaController::class, 'show'])->name('show');
+    Route::get('/{dorama:slug}/watch', [DoramaController::class, 'watch'])->name('watch');
     Route::get('/', [DoramaController::class, 'index'])->name('index');
 
     Route::middleware('auth')->group(function () {
@@ -95,13 +97,17 @@ Route::middleware('auth')
     ->group(function () {
         Route::get('/', AdminPanelController::class)->name('index');
 
-        Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy',]);
+        Route::resource('/anime', AnimeAdminController::class)->except(['show', 'destroy']);
         Route::prefix('anime')->name('anime.')->group(function () {
             Route::get('/draft', [AnimeAdminController::class, 'draft'])->name('draft');
             Route::get('/published', [AnimeAdminController::class, 'published'])->name('published');
             Route::get('/archive', [AnimeAdminController::class, 'archive'])->name('archive');
             Route::get('/deleted', [AnimeAdminController::class, 'deleted'])->name('deleted');
             Route::get('/{anime:slug}/restore', [AnimeAdminController::class, 'restore'])->name('restore');
+
+            Route::prefix('{anime}')->group(function () {
+                Route::resource('episodes', AnimeEpisodesAdminController::class)->except(['show']);
+            });
         });
 
         Route::resource('/dorama', DoramaAdminController::class)->except(['show', 'destroy']);
@@ -111,6 +117,10 @@ Route::middleware('auth')
             Route::get('/archive', [DoramaAdminController::class, 'archive'])->name('archive');
             Route::get('/deleted', [DoramaAdminController::class, 'deleted'])->name('deleted');
             Route::get('/{dorama:slug}/restore', [DoramaAdminController::class, 'restore'])->name('restore');
+
+            Route::prefix('{dorama}')->group(function () {
+                Route::resource('episodes', DoramaEpisodesAdminController::class)->except(['show']);
+            });
         });
 
         Route::resource('/types', TypeAdminController::class)->except(['show', 'destroy']);

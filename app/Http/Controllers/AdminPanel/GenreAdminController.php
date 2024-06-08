@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GenreRequest;
+use App\Http\Requests\AdminPanel\GenreStoreRequest;
+use App\Http\Requests\AdminPanel\GenreUpdateRequest;
 use App\Models\Genre;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +29,7 @@ class GenreAdminController extends Controller
         return view('admin.genres.create');
     }
 
-    public function store(GenreRequest $request): RedirectResponse
+    public function store(GenreStoreRequest $request): RedirectResponse
     {
         $genre = Genre::query()->create($request->validated());
         return redirect()
@@ -42,7 +43,7 @@ class GenreAdminController extends Controller
             ->with('genre', $genre);
     }
 
-    public function update(GenreRequest $request, Genre $genre): RedirectResponse
+    public function update(GenreUpdateRequest $request, Genre $genre): RedirectResponse
     {
         $genre->update($request->validated());
         return redirect()

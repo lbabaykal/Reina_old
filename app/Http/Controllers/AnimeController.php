@@ -7,16 +7,14 @@ use App\Http\Requests\FavoriteRequest;
 use App\Http\Requests\RatingRequest;
 use App\Models\Anime;
 use App\Models\Folder;
-use App\Models\User;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AnimeController extends Controller
 {
 
-        public function index(): View
+    public function index(): View
     {
         $animes = Anime::query()
             ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
@@ -71,4 +69,35 @@ class AnimeController extends Controller
 
         return redirect()->back();
     }
+
+    public function watch(Anime $anime): View
+    {
+        $ratingUser = $anime->ratings()
+            ->where('user_id', auth()->id())
+            ->value('assessment');
+
+        $favoriteUser = $anime->favorites()
+            ->where('user_id', auth()->id())
+            ->value('folder_id');
+
+        $foldersUser = Folder::query()
+            ->where('user_id', auth()->id())
+            ->orWhere('user_id', 0)
+            ->applyFolderFilter(Anime::class)
+            ->orderBy('id')
+            ->get();
+
+        $episodes = $anime->animeEpisodes()
+            ->where('status', StatusEnum::PUBLISHED)
+            ->orderBy('number')
+            ->get();
+
+        return view('layouts.anime.watch')
+            ->with('anime', $anime)
+            ->with('favoriteUser', $favoriteUser)
+            ->with('ratingUser', $ratingUser)
+            ->with('foldersUser', $foldersUser)
+            ->with('episodes', $episodes);
+    }
+
 }

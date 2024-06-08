@@ -71,4 +71,34 @@ class DoramaController extends Controller
         return redirect()->back();
     }
 
+    public function watch(Dorama $dorama): View
+    {
+        $ratingUser = $dorama->ratings()
+            ->where('user_id', auth()->id())
+            ->value('assessment');
+
+        $favoriteUser = $dorama->favorites()
+            ->where('user_id', auth()->id())
+            ->value('folder_id');
+
+        $foldersUser = Folder::query()
+            ->where('user_id', auth()->id())
+            ->orWhere('user_id', 0)
+            ->applyFolderFilter(Dorama::class)
+            ->orderBy('id')
+            ->get();
+
+        $episodes = $dorama->doramaEpisodes()
+            ->where('status', StatusEnum::PUBLISHED)
+            ->orderBy('number')
+            ->get();
+
+        return view('layouts.dorama.watch')
+            ->with('dorama', $dorama)
+            ->with('favoriteUser', $favoriteUser)
+            ->with('ratingUser', $ratingUser)
+            ->with('foldersUser', $foldersUser)
+            ->with('episodes', $episodes);
+    }
+
 }

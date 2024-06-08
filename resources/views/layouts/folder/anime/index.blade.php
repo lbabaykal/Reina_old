@@ -1,5 +1,5 @@
 @extends('index')
-@section('title', config('app.name') . ' - Избранное ' . auth()->user()->name)
+@section('title', 'Избранное '. auth()->user()->name .' - '. config('app.name'))
 @section('content')
 
     @include('layouts.folder.anime.modals.create')
@@ -9,7 +9,7 @@
             <div class="w-full text-center text-lime-500">{{ $message }}</div>
         @endif
         <div class="flex flex-row w-full">
-            <div class="min-w-[260] mx-2 select-none">
+            <div class="w-15% mt-2.5 mx-2 select-none">
                 <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_#f00]">
                     <div class="w-full h-[40] flex flex-row group
                         @if(request()->is('folders/animes')) bg-blackActive @endif
@@ -35,7 +35,9 @@
                         </button>
                     </div>
                     @foreach($folders as $folder)
-                        <div class="w-full h-[40] flex flex-row items-center group @if(request()->is('folders/animes/' . $folder->id)) bg-blackActive @endif">
+                        <div class="w-full h-[40] flex flex-row items-center group
+                        @if(request()->is('folders/animes/' . $folder->id)) bg-blackActive @endif
+                        ">
                             <a href="{{ route('folders.animes.show', $folder) }}"
                                class="w-full h-full text-xl flex items-center justify-between truncate
                                       group-hover:bg-gray-100 group-hover:text-black">
@@ -60,14 +62,13 @@
                 </div>
             </div>
 
-            <div class="w-full mt-2 px-2.5 grid gap-2 place-items-center grid-flow-row grid-cols-8">
+            <div class="w-85% mt-2 px-2.5 grid gap-2 grid-flow-row grid-cols-7">
                 @each('layouts.anime.card', $animes, 'anime')
             </div>
         </div>
-
             {{ $animes->links() }}
-
     </section>
+
 @endsection
 
 

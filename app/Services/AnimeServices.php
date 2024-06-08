@@ -33,7 +33,7 @@ class AnimeServices
         $studios = $request->input('studios') ?? null;
 
         $anime->age_rating = $request->input('age_rating');
-        $anime->episodes_released = $request->input('episodes_released');
+        $anime->episodes_released = 0;
         $anime->episodes_total = $request->input('episodes_total');
         $anime->duration = $request->input('duration');
         $anime->release = $request->date('release');
@@ -90,10 +90,9 @@ class AnimeServices
         $studios = $request->input('studios') ?? null;
 
         $anime->age_rating = $request->input('age_rating');
-        $anime->episodes_released = $request->input('episodes_released');
         $anime->episodes_total = $request->input('episodes_total');
         $anime->duration = $request->input('duration');
-        $anime->release = $request->date('release');
+        $anime->release = $request->input('release');
         $anime->description = $request->input('description');
         $anime->user_id = auth()->id();
         $anime->status = $request->input('status');

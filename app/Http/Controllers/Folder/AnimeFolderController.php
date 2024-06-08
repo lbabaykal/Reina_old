@@ -65,7 +65,7 @@ class AnimeFolderController extends Controller
     public function store(FolderRequest $request): RedirectResponse
     {
 
-        $countFolder = auth()->user()->folders()->folderAnime()->count();
+        $countFolder = auth()->user()->folders()->applyFolderFilter(Anime::class)->count();
 
         if ($countFolder >= Reina::COUNT_FOLDERS) {
             return redirect()

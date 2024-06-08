@@ -24,8 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Anime::observe(AnimeObserver::class);
-        Dorama::observe(DoramaObserver::class);
         Paginator::defaultView('pagination');
     }
 }

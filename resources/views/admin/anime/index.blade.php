@@ -61,7 +61,10 @@
                             Статус
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            Episodes
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Edit
                         </th>
                     </tr>
                     </thead>
@@ -82,6 +85,13 @@
                             </td>
                             <td class="px-6 py-4">
                                 {{ $anime->status }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('admin.anime.episodes.index', $anime) }}"
+                                   class="hover:text-love"
+                                >
+                                    {{ $anime->episodes_released }}/{{ $anime->episodes_total }} эпизодов
+                                </a>
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.anime.edit', $anime) }}"

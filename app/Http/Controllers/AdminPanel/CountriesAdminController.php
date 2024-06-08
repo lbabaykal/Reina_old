@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
+namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CountryRequest;
+use App\Http\Requests\AdminPanel\CountryStoreRequest;
+use App\Http\Requests\AdminPanel\CountryUpdateRequest;
 use App\Models\Country;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +29,7 @@ class CountriesAdminController extends Controller
         return view('admin.countries.create');
     }
 
-    public function store(CountryRequest $request): RedirectResponse
+    public function store(CountryStoreRequest $request): RedirectResponse
     {
         $country = Country::query()->create($request->validated());
         return redirect()
@@ -43,7 +43,7 @@ class CountriesAdminController extends Controller
             ->with('country', $country);
     }
 
-    public function update(CountryRequest $request, Country $country): RedirectResponse
+    public function update(CountryUpdateRequest $request, Country $country): RedirectResponse
     {
         $country->update($request->validated());
         return redirect()

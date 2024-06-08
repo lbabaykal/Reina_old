@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
+namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StudioRequest;
+use App\Http\Requests\AdminPanel\StudioStoreRequest;
+use App\Http\Requests\AdminPanel\StudioUpdateRequest;
 use App\Models\Studio;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +29,7 @@ class StudiosAdminController extends Controller
         return view('admin.studios.create');
     }
 
-    public function store(StudioRequest $request): RedirectResponse
+    public function store(StudioStoreRequest $request): RedirectResponse
     {
         $studio = Studio::query()->create($request->validated());
         return redirect()
@@ -43,7 +43,7 @@ class StudiosAdminController extends Controller
             ->with('studio', $studio);
     }
 
-    public function update(StudioRequest $request, Studio $studio): RedirectResponse
+    public function update(StudioUpdateRequest $request, Studio $studio): RedirectResponse
     {
         $studio->update($request->validated());
         return redirect()

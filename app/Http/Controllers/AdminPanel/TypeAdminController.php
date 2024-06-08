@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
-
+namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TypeRequest;
+use App\Http\Requests\AdminPanel\TypeStoreRequest;
+use App\Http\Requests\AdminPanel\TypeUpdateRequest;
 use App\Models\Type;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +29,7 @@ class TypeAdminController extends Controller
         return view('admin.types.create');
     }
 
-    public function store(TypeRequest $request): RedirectResponse
+    public function store(TypeStoreRequest $request): RedirectResponse
     {
         $type = Type::query()->create($request->validated());
         return redirect()
@@ -43,7 +43,7 @@ class TypeAdminController extends Controller
             ->with('type', $type);
     }
 
-    public function update(TypeRequest $request, Type $type): RedirectResponse
+    public function update(TypeUpdateRequest $request, Type $type): RedirectResponse
     {
         $type->update($request->validated());
         return redirect()

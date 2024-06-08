@@ -64,7 +64,7 @@ class DoramaFolderController extends Controller
     public function store(FolderRequest $request): RedirectResponse
     {
 
-        $countFolder = auth()->user()->folders()->folderDorama()->count();
+        $countFolder = auth()->user()->folders()->applyFolderFilter(Dorama::class)->count();
 
         if ($countFolder >= Reina::COUNT_FOLDERS) {
             return redirect()

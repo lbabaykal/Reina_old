@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class UpdateRating extends Command
 {
-    protected $signature = 'app:update-rating';
+    protected $signature = 'update-rating';
     protected $description = 'Обновление рейтинга.';
 
     public function handle()

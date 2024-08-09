@@ -13,7 +13,7 @@ class DoramaObserver
     public function created(Dorama $dorama): void
     {
         if ($dorama->status === StatusEnum::PUBLISHED->value) {
-            Cache::forget('main_doramas');
+            Cache::store('redis_doramas')->forget('main_doramas');
         }
     }
 
@@ -35,10 +35,11 @@ class DoramaObserver
     public function updated(Dorama $dorama): void
     {
         if ($dorama->isDirty() && $dorama->status === StatusEnum::PUBLISHED->value) {
-            Cache::forget('main_doramas');
+            Cache::store('redis_doramas')->forget('main_doramas');
         }
 
-        if ($dorama->getOriginal('status') === StatusEnum::PUBLISHED->value || $dorama->getAttribute('status') === StatusEnum::PUBLISHED->value) {
+        if ($dorama->getOriginal('status') === StatusEnum::PUBLISHED->value
+            || $dorama->getAttribute('status') === StatusEnum::PUBLISHED->value) {
             $this->forgetCacheMainDorama($dorama);
         }
     }
@@ -66,6 +67,10 @@ class DoramaObserver
     public function forceDeleted(Dorama $dorama): void
     {
         $dorama->ratings()->delete();
+        $dorama->favorites()->delete();
+
+        $dorama->doramaEpisodes()->delete();
+
         $dorama->genres()->detach();
         $dorama->studios()->detach();
 
@@ -77,6 +82,7 @@ class DoramaObserver
             Storage::disk('dorama_covers')->delete($dorama->getOriginal('cover'));
         }
 
+        $this->forgetCacheDorama($dorama);
         $this->forgetCacheMainDorama($dorama);
     }
 
@@ -87,8 +93,14 @@ class DoramaObserver
 
     public function forgetCacheMainDorama(Dorama $dorama): void
     {
-        if (Cache::has('main_doramas') && Cache::get('main_doramas')->contains('id', $dorama->id)) {
-            Cache::forget('main_doramas');
+        if (Cache::store('redis_doramas')->has('main_doramas')
+            && Cache::store('redis_doramas')->get('main_doramas')->contains('id', $dorama->id)) {
+            Cache::store('redis_doramas')->forget('main_doramas');
         }
+    }
+
+    public function forgetCacheDorama(Dorama $dorama): void
+    {
+        Cache::store('redis_doramas')->forget('dorama:' . $dorama->slug);
     }
 }

@@ -19,12 +19,12 @@ use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//Route::get('/', function () {
-//    return Inertia::render('Welcome', [
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//    ]);
-//});
+Route::get('/1111', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+});
 
 Route::middleware([
     'auth:sanctum',
@@ -38,6 +38,7 @@ Route::middleware([
 
 //========================================================================================
 
+// ====SEARCH====
 Route::get('/', MainController::class)->name('main');
 Route::get('/search', SearchController::class)->name('search');
 Route::get('/search_anime', [SearchController::class, 'anime'])->name('search.anime');
@@ -67,27 +68,39 @@ Route::prefix('dorama')->name('dorama.')->group(function () {
     });
 });
 
-// ====FOLDERS====
-Route::middleware('auth')->prefix('folders')->name('folders.')->group(function () {
-    Route::get('/', [FolderController::class, 'index'])->name('index');
-    Route::get('/{folder}/edit', [FolderController::class, 'edit'])->name('edit');
-    Route::patch('/{folder}', [FolderController::class, 'update'])->name('update');
-    Route::delete('/{folder}', [FolderController::class, 'destroy'])->name('destroy');
+Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
+    // ====FOLDERS====
+    Route::prefix('folders')->name('folders.')->group(function () {
+        Route::get('/', FolderController::class)->name('index');
 
+        Route::prefix('animes')->name('animes.')->group(function () {
+            Route::get('/', [AnimeFolderController::class, 'index'])->name('index');
+            Route::get('/{folder}', [AnimeFolderController::class, 'show'])->name('show');
+            Route::get('/create', [AnimeFolderController::class, 'create'])->name('create');
+            Route::post('/', [AnimeFolderController::class, 'store'])->name('store');
+            Route::get('/{folder}/edit', [AnimeFolderController::class, 'edit'])->name('edit');
+            Route::patch('/{folder}', [AnimeFolderController::class, 'update'])->name('update');
+            Route::delete('/{folder}', [AnimeFolderController::class, 'destroy'])->name('destroy');
+        });
 
-    Route::prefix('animes')->name('animes.')->group(function () {
-        Route::get('/', [AnimeFolderController::class, 'index'])->name('index');
-        Route::get('/create', [AnimeFolderController::class, 'create'])->name('create');
-        Route::post('/', [AnimeFolderController::class, 'store'])->name('store');
-        Route::get('/{folder}', [AnimeFolderController::class, 'show'])->name('show');
+        Route::prefix('doramas')->name('doramas.')->group(function () {
+            Route::get('/', [DoramaFolderController::class, 'index'])->name('index');
+            Route::get('/{folder}', [DoramaFolderController::class, 'show'])->name('show');
+            Route::get('/create', [DoramaFolderController::class, 'create'])->name('create');
+            Route::post('/', [DoramaFolderController::class, 'store'])->name('store');
+            Route::get('/{folder}/edit', [DoramaFolderController::class, 'edit'])->name('edit');
+            Route::patch('/{folder}', [DoramaFolderController::class, 'update'])->name('update');
+            Route::delete('/{folder}', [DoramaFolderController::class, 'destroy'])->name('destroy');
+        });
     });
 
-    Route::prefix('doramas')->name('doramas.')->group(function () {
-        Route::get('/', [DoramaFolderController::class, 'index'])->name('index');
-        Route::get('/create', [DoramaFolderController::class, 'create'])->name('create');
-        Route::post('/', [DoramaFolderController::class, 'store'])->name('store');
-        Route::get('/{folder}', [DoramaFolderController::class, 'show'])->name('show');
+    // ====SUBSCRIPTION====
+    Route::prefix('subscription')->name('subscription.')->group(function () {
+        Route::get('/', function () {
+            return 'Описание subscription';
+        })->name('index');
     });
+
 });
 
 // ====ADMIN====

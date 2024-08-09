@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class FolderRequest extends FormRequest
+class FavoriteDoramasRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,15 +19,12 @@ class FolderRequest extends FormRequest
      */
     public function rules(): array
     {
-        if ($this->isMethod('POST')) {
-            return [
-                'title' => ['required', 'string', 'min:2', 'max:255',],
-            ];
-        } elseif ($this->isMethod('PATCH')) {
-            return [
-                'title' => ['required', 'string', 'min:2', 'max:255',  Rule::unique('folders')->ignore($this->folder)],
-            ];
-        }
+        return [
+            'folder' => ['required', 'numeric',
+                Rule::exists('folder_doramas', 'id')
+                    ->whereIn('user_id', [0, auth()->id()])
+            ],
+        ];
     }
 
 }

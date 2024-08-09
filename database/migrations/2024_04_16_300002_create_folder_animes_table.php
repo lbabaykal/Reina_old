@@ -6,19 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
-        Schema::create('folders', function (Blueprint $table) {
+        Schema::create('folder_animes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('user_id');
-            $table->string('folderable_type');
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('folders');
+        Schema::dropIfExists('folder_animes');
     }
 };

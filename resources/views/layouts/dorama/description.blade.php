@@ -1,4 +1,4 @@
-<div class="w-[1600] m-auto">
+<div class="w-10/12 m-auto">
     <div class="">
         <ul id="default-tab"
             data-tabs-toggle="#default-tab-content"
@@ -28,7 +28,7 @@
                         aria-selected="false"
                         class="inline-block p-4 border-b-2 tracking-wide"
                 >
-                    {{ __('В главных ролях') }}
+                    {{ __('Актеры и съемочная группа') }}
                 </button>
             </li>
         </ul>
@@ -77,7 +77,7 @@
                             <dt class="text-gray-400 text-xl">{{ __('Жанр') }}</dt>
                             <dd>
                                 @foreach($dorama->genres as $genre)
-                                    <a href="{{ route('search', ['genre[]' => $genre->id]) }}"
+                                    <a href="{{ route('search.dorama', ['genre[]' => $genre->id]) }}"
                                        class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide"
                                     >{{ $genre->title_ru }}</a>
                                     @if($loop->last === false)
@@ -114,11 +114,9 @@
                 </dl>
             </div>
 
-
             <div class="text-justify text-lg my-1 border-t border-gray-500 indent-8 p-4">
                 {{ $dorama->description }}
             </div>
-
         </div>
 
         <div id="actors"

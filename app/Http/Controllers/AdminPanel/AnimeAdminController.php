@@ -20,12 +20,11 @@ use Illuminate\View\View;
 
 class AnimeAdminController extends Controller
 {
-
     public function index(): View
     {
         $animes = Anime::query()
             ->withoutGlobalScopes()
-            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'episodes_released', 'episodes_total'])
+            ->select(['slug', 'title_ru', 'status', 'rating', 'type_id', 'country_id', 'episodes_released', 'episodes_total', 'updated_at'])
             ->with('type')
             ->with('country')
             ->latest('updated_at')

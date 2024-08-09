@@ -75,7 +75,7 @@
                                 <a href="{{ route('anime.show', ['anime' => $anime->slug]) }}">{{ $anime->title_ru }}</a>
                             </th>
                             <td class="px-6 py-4">
-                                {{ $anime->type->title_ru }}
+                                {{ $anime->type->title_ru }} - {{ $anime->updated_at }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $anime->country->title_ru }}

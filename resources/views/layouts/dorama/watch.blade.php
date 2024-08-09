@@ -1,15 +1,13 @@
 @extends('index')
-@section('title', config('app.name') . ' - ' . $dorama->title_ru)
+@section('title', $dorama->title_ru . ' - ' . config('app.name'))
 @section('content')
 
     @include('layouts.dorama.modals.rate')
     @include('layouts.dorama.modals.folders')
 
     <section class="margin-content">
-
-        <div class="w-full min-h-20 bg-gray-200 text-black flex items-center justify-center px-2.5">
-
-            <div class="min-w-[1400] w-[1400] flex items-center justify-between">
+        <div class="w-full min-h-20 bg-gray-200 text-black flex items-center justify-center">
+            <div class="min-w-[1400] w-[1400] flex items-center justify-between ps-2.5 pe-2">
                 <div class="w-96 flex flex-col flex-auto">
                     <div class="text-2xl truncate">
                         <a href="{{ route('dorama.show', $dorama) }}" class="hover:text-love duration-200 transition-all">
@@ -64,7 +62,7 @@
                         >
                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5" stroke="currentColor"
                                  class="w-6 h-6 stroke-amber-400 group-hover:fill-amber-400
-                                 @isset($ratingUser) fill-amber-400 @endisset
+                                @isset($ratingUser) fill-amber-400 @endisset
                             ">
                                 <path d="M9.15316 5.40838C10.4198 3.13613 11.0531 2 12 2C12.9469 2 13.5802 3.13612 14.8468 5.40837L15.1745 5.99623C15.5345 6.64193 15.7144 6.96479 15.9951 7.17781C16.2757 7.39083 16.6251 7.4699 17.3241 7.62805L17.9605 7.77203C20.4201 8.32856 21.65 8.60682 21.9426 9.54773C22.2352 10.4886 21.3968 11.4691 19.7199 13.4299L19.2861 13.9372C18.8096 14.4944 18.5713 14.773 18.4641 15.1177C18.357 15.4624 18.393 15.8341 18.465 16.5776L18.5306 17.2544C18.7841 19.8706 18.9109 21.1787 18.1449 21.7602C17.3788 22.3417 16.2273 21.8115 13.9243 20.7512L13.3285 20.4768C12.6741 20.1755 12.3469 20.0248 12 20.0248C11.6531 20.0248 11.3259 20.1755 10.6715 20.4768L10.0757 20.7512C7.77268 21.8115 6.62118 22.3417 5.85515 21.7602C5.08912 21.1787 5.21588 19.8706 5.4694 17.2544L5.53498 16.5776C5.60703 15.8341 5.64305 15.4624 5.53586 15.1177C5.42868 14.773 5.19043 14.4944 4.71392 13.9372L4.2801 13.4299C2.60325 11.4691 1.76482 10.4886 2.05742 9.54773C2.35002 8.60682 3.57986 8.32856 6.03954 7.77203L6.67589 7.62805C7.37485 7.4699 7.72433 7.39083 8.00494 7.17781C8.28555 6.96479 8.46553 6.64194 8.82547 5.99623L9.15316 5.40838Z"/>
                             </svg>
@@ -117,18 +115,16 @@
 
                 </div>
             </div>
-
         </div>
-
 
         <div class="w-full flex mt-2.5">
             <div class="flex mx-auto">
                 <div class="w-HD aspect-[16/9] bg-violet-600 rounded-lg overflow-hidden">
-{{--                    <video class="w-full aspect-[16/9]" controls>--}}
-{{--                        <source src="{{ asset('Violet_Evergarden.mp4') }}" type="video/mp4">--}}
-{{--                        Ваш браузер не поддерживает видео в формате HTML5.--}}
-{{--                    </video>--}}
-                        <iframe class="w-full aspect-[16/9]" src="https://www.youtube.com/embed/I1C3SXLu3P4" allowfullscreen></iframe>
+                    <video class="w-full aspect-[16/9]" controls>
+                        <source src="{{ asset('Violet_Evergarden.mp4') }}" type="video/mp4">
+                        Ваш браузер не поддерживает видео в формате HTML5.
+                    </video>
+{{--                        <iframe class="w-full aspect-[16/9]" src="https://www.youtube.com/embed/I1C3SXLu3P4" allowfullscreen></iframe>--}}
                 </div>
 
                 <div id="EpisodesDropdown"
@@ -145,7 +141,7 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="w-full text-love text-2xl text-center font-bold">
+                        <div class="w-full h-full text-love text-2xl flex justify-center items-center">
                             {{ __('Пусто') }}
                         </div>
                     @endif
@@ -156,8 +152,6 @@
                         {{--                                @endif--}}
                 </div>
             </div>
-
         </div>
-
     </section>
 @endsection

@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Country;
-use App\Models\Favorite;
 use App\Models\Genre;
 use App\Models\Rating;
 use App\Models\Scopes\PublishedScope;
@@ -52,16 +51,12 @@ trait AnimeAndDoramTrait
         return $this->morphMany(Rating::class, 'ratingable');
     }
 
-    public function favorites(): MorphMany
-    {
-        return $this->morphMany(Favorite::class, 'favoriteable');
-    }
-
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom(['title_ru'])
-            ->saveSlugsTo('slug');
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 
     public function getRouteKeyName(): string

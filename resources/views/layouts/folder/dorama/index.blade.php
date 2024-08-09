@@ -1,5 +1,5 @@
 @extends('index')
-@section('title', config('app.name') . ' - Избранное ' . auth()->user()->name)
+@section('title', 'Избранное '. auth()->user()->name .' - '. config('app.name'))
 @section('content')
 
     @include('layouts.folder.dorama.modals.create')
@@ -9,12 +9,12 @@
             <div class="w-full text-center text-lime-500">{{ $message }}</div>
         @endif
         <div class="flex flex-row w-full">
-            <div class="min-w-[260] mx-2 select-none">
-                <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_#8b00ff]">
+            <div class="w-15% mt-2.5 mx-2 select-none">
+                <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_rgb(140,0,255)]">
                     <div class="w-full h-[40] flex flex-row group
-                        @if(request()->is('folders/doramas')) bg-blackActive @endif
+                        @if(request()->is('user/folders/doramas')) bg-blackActive @endif
                     ">
-                        <a href="{{ route('folders.doramas.index') }}"
+                        <a href="{{ route('user.folders.doramas.index') }}"
                            class="w-full h-full text-xl flex items-center justify-between truncate
                                       group-hover:bg-gray-100 group-hover:text-black">
                                 <span class="px-3 truncate">
@@ -35,19 +35,21 @@
                         </button>
                     </div>
                     @foreach($folders as $folder)
-                        <div class="w-full h-[40] flex flex-row items-center group @if(request()->is('folders/doramas/' . $folder->id)) bg-blackActive @endif">
-                            <a href="{{ route('folders.doramas.show', $folder) }}"
+                        <div class="w-full h-[40] flex flex-row items-center group
+                        @if(request()->is('user/folders/doramas/' . $folder->id)) bg-blackActive @endif
+                        ">
+                            <a href="{{ route('user.folders.doramas.show', $folder) }}"
                                class="w-full h-full text-xl flex items-center justify-between truncate
                                       group-hover:bg-gray-100 group-hover:text-black">
                                 <span class="px-3 truncate">
                                     {{ $folder->title }}
                                 </span>
                                 <span class="px-2">
-                                    {{ $folder->favorites_user_count }}
+                                    {{ $folder->favorites_doramas_user_count }}
                                 </span>
                             </a>
                             @if($folder->user_id == auth()->id())
-                                <a href="{{ route('folders.edit', $folder->id) }}"
+                                <a href="{{ route('user.folders.doramas.edit', $folder->id) }}"
                                    class="w-[40] h-full flex items-center justify-center text-black bg-white invisible
                                         group-hover:text-white group-hover:bg-sky-500 group-hover:visible">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -60,14 +62,10 @@
                 </div>
             </div>
 
-            <div class="w-full mt-2 px-2.5 grid gap-2 place-items-center grid-flow-row grid-cols-8">
+            <div class="w-85% mt-2 px-2.5 grid gap-2 grid-flow-row grid-cols-7">
                 @each('layouts.dorama.card', $doramas, 'dorama')
             </div>
         </div>
-
             {{ $doramas->links() }}
-
     </section>
 @endsection
-
-

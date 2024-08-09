@@ -44,6 +44,11 @@ class Dorama extends Model
 
     public $timestamps = false;
 
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(FavoriteDorama::class);
+    }
+
     public function doramaEpisodes(): HasMany
     {
         return $this->hasMany(DoramaEpisode::class);

@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             StudioSeeder::class,
             CountrySeeder::class,
             UserSeeder::class,
-            FolderSeeder::class,
+            FolderAnimeSeeder::class,
+            FolderDoramaSeeder::class,
 //            Permissions::class,
 //            Roles::class,
         ]);

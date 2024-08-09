@@ -1,13 +1,13 @@
 @extends('index')
-@section('title', config('app.name') . ' - ' . $anime->title_ru)
+@section('title', $anime->title_ru . ' - ' . config('app.name'))
 @section('content')
 
     @include('layouts.anime.modals.rate')
     @include('layouts.anime.modals.folders')
 
     <section class="margin-content">
-        <div class="w-full min-h-20 bg-gray-200 text-black flex items-center justify-center px-2.5">
-            <div class="min-w-[1400] w-[1400] flex items-center justify-between">
+        <div class="w-full min-h-20 bg-gray-200 text-black flex items-center justify-center">
+            <div class="min-w-[1400] w-[1400] flex items-center justify-between ps-2.5 pe-2">
                 <div class="w-96 flex flex-col flex-auto">
                     <div class="text-2xl truncate">
                         <a href="{{ route('anime.show', $anime) }}" class="hover:text-love duration-200 transition-all">
@@ -86,8 +86,8 @@
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                  class="w-6 h-6 stroke-red-500 group-hover:fill-red-500
-                             @isset($favoriteUser ) fill-red-500 @endisset
-                             ">
+                                @isset($favoriteUser ) fill-red-500 @endisset
+                            ">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
                             </svg>
                             <span class="ms-2 text-black max-w-40 truncate text-nowrap">
@@ -120,11 +120,11 @@
         <div class="w-full flex mt-2.5">
             <div class="flex mx-auto">
                 <div class="w-HD aspect-[16/9] bg-violet-600 rounded-lg overflow-hidden">
-{{--                    <video class="w-full aspect-[16/9]" controls>--}}
-{{--                        <source src="{{ asset('Violet_Evergarden.mp4') }}" type="video/mp4">--}}
-{{--                        Ваш браузер не поддерживает видео в формате HTML5.--}}
-{{--                    </video>--}}
-                        <iframe class="w-full aspect-[16/9]" src="https://www.youtube.com/embed/PvyaVqfylu4" allowfullscreen></iframe>
+                    <video class="w-full aspect-[16/9]" controls>
+                        <source src="{{ asset('Violet_Evergarden.mp4') }}" type="video/mp4">
+                        Ваш браузер не поддерживает видео в формате HTML5.
+                    </video>
+{{--                        <iframe class="w-full aspect-[16/9]" src="https://www.youtube.com/embed/PvyaVqfylu4" allowfullscreen></iframe>--}}
                 </div>
 
                 <div id="EpisodesDropdown"
@@ -141,7 +141,7 @@
                             @endforeach
                         </div>
                     @else
-                        <div class="w-full text-love text-2xl text-center">
+                        <div class="w-full h-full text-love text-2xl flex justify-center items-center">
                             {{ __('Пусто') }}
                         </div>
                     @endif

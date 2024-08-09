@@ -78,7 +78,7 @@
 
 
 @if ($paginator->hasPages())
-    <div class="flex flex-col items-center my-11">
+    <div class="flex flex-col items-center my-8">
         <div class="flex text-white">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())

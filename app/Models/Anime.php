@@ -44,6 +44,11 @@ class Anime extends Model
 
     public $timestamps = false;
 
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(FavoriteAnime::class);
+    }
+
     public function animeEpisodes(): HasMany
     {
         return $this->hasMany(AnimeEpisode::class);

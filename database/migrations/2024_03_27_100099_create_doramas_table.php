@@ -32,7 +32,6 @@ return new class extends Migration
             $table->unsignedInteger('duration');
             $table->date('release');
             $table->text('description')->nullable();
-            $table->foreignIdFor(User::class)->constrained();
             $table->enum('status', ['PUBLISHED', 'DRAFT', 'ARCHIVE'])->default('DRAFT');
             $table->float('rating')->default(0);
             $table->unsignedInteger('count_assessments')->default(0);

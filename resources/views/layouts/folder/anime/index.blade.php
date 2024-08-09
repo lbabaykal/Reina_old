@@ -10,17 +10,17 @@
         @endif
         <div class="flex flex-row w-full">
             <div class="w-15% mt-2.5 mx-2 select-none">
-                <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_#f00]">
+                <div class="sticky top-[70] bg-blackSimple shadow-[0_9px_6px_-3px_rgb(255,0,0)]">
                     <div class="w-full h-[40] flex flex-row group
-                        @if(request()->is('folders/animes')) bg-blackActive @endif
+                        @if(request()->is('user/folders/animes')) bg-blackActive @endif
                     ">
-                        <a href="{{ route('folders.animes.index') }}"
+                        <a href="{{ route('user.folders.animes.index') }}"
                            class="w-full h-full text-xl flex items-center justify-between truncate
                                       group-hover:bg-gray-100 group-hover:text-black">
                                 <span class="px-3 truncate">
                                     {{ __('Все') }}
                                 </span>
-                            <span class="px-2">
+                                <span class="px-2">
                                     {{ auth()->user()->favoriteAnimes()->count() }}
                                 </span>
                         </a>
@@ -36,20 +36,20 @@
                     </div>
                     @foreach($folders as $folder)
                         <div class="w-full h-[40] flex flex-row items-center group
-                        @if(request()->is('folders/animes/' . $folder->id)) bg-blackActive @endif
+                        @if(request()->is('user/folders/animes/' . $folder->id)) bg-blackActive @endif
                         ">
-                            <a href="{{ route('folders.animes.show', $folder) }}"
+                            <a href="{{ route('user.folders.animes.show', $folder) }}"
                                class="w-full h-full text-xl flex items-center justify-between truncate
                                       group-hover:bg-gray-100 group-hover:text-black">
                                 <span class="px-3 truncate">
                                     {{ $folder->title }}
                                 </span>
                                 <span class="px-2">
-                                    {{ $folder->favorites_user_count }}
+                                    {{ $folder->favorites_animes_user_count }}
                                 </span>
                             </a>
                             @if($folder->user_id == auth()->id())
-                                <a href="{{ route('folders.edit', $folder->id) }}"
+                                <a href="{{ route('user.folders.animes.edit', $folder->id) }}"
                                    class="w-[40] h-full flex items-center justify-center text-black bg-white invisible
                                         group-hover:text-white group-hover:bg-sky-500 group-hover:visible">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -68,7 +68,4 @@
         </div>
             {{ $animes->links() }}
     </section>
-
 @endsection
-
-

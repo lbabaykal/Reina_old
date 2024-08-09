@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Anime;
 use App\Models\Dorama;
 use App\Reina;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
@@ -13,15 +12,15 @@ class MainController extends Controller
 {
     public function __invoke(): View
     {
-        $animes = Cache::rememberForever('main_animes', function () {
+        $animes = Cache::store('redis_animes')->rememberForever('main_animes', function () {
             return Anime::query()
                 ->select(['id', 'slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
                 ->limit(Reina::COUNT_ARTICLES_MAIN)
                 ->latest('updated_at')
                 ->get();
         });
-        
-        $doramas = Cache::rememberForever('main_doramas', function () {
+
+        $doramas = Cache::store('redis_doramas')->rememberForever('main_doramas', function () {
             return Dorama::query()
                 ->select(['id', 'slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
                 ->limit(Reina::COUNT_ARTICLES_MAIN)

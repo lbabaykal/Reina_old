@@ -1,5 +1,5 @@
 @extends('index')
-@section('title', config('app.name') . ' - ' . $dorama->title_ru)
+@section('title', $dorama->title_ru . ' - ' . config('app.name'))
 @section('content')
 
     @include('layouts.dorama.modals.rate')
@@ -20,15 +20,21 @@
                             {{ $dorama->episodes_released }} / {{ $dorama->episodes_total }}
                         </span>
                     @endif
-                    <span class="px-2">{{ \Carbon\CarbonInterval::minutes($dorama->duration)->cascade()->forHumans(['short' => true]) }}</span>
-                    <a href="/" class="px-2 underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide">{{ \Illuminate\Support\Carbon::parse($dorama->release)->format('Y') }}</a>
+                    <span class="px-2">
+                        {{ \Carbon\CarbonInterval::minutes($dorama->duration)->cascade()->forHumans(['short' => true]) }}
+                    </span>
+                    <a href="{{ route('search.dorama', ['year_from' => \Illuminate\Support\Carbon::parse($dorama->release)->format('Y')]) }}"
+                       class="px-2 underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide"
+                    >
+                        {{ \Illuminate\Support\Carbon::parse($dorama->release)->format('Y') }}
+                    </a>
                     <span class="px-2 text-love text-xl font-bold">{{ $dorama->age_rating }}</span>
                 </div>
 
                 <div class="w-full">
                     <span class="my-1 text-gray-300 flex flex-row justify-center items-center content-center">
                          @foreach($dorama->genres as $genre)
-                            <a href="{{ route('search', ['genre[]' => $genre->id]) }}"
+                            <a href="{{ route('search.dorama', ['genre[]' => $genre->id]) }}"
                                class="underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide mx-1"
                             >
                                 {{ $genre->title_ru }}

@@ -26,7 +26,7 @@
                     </div>
                     <!-- Modal body -->
                     <div class="p-4 space-y-4">
-                        <form action="{{ route('folders.update', $folder->id) }}"
+                        <form action="{{ route('user.folders.doramas.update', $folder->id) }}"
                               method="POST"
                               id="folder_update"
                               class="flex flex-row justify-center items-center text-white text-xl"
@@ -45,7 +45,7 @@
                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                             </div>
                         </form>
-                        <form action="{{ route('folders.destroy', $folder->id) }}"
+                        <form action="{{ route('user.folders.doramas.destroy', $folder->id) }}"
                               method="POST"
                               id="folder_delete"
                               class="flex flex-row justify-center items-center text-white text-xl"

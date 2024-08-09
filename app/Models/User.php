@@ -72,33 +72,34 @@ class User extends Authenticatable
         return $this->hasMany(Rating::class);
     }
 
-    public function favorites(): HasMany
+    public function foldersAnimes(): HasMany
     {
-        return $this->hasMany(Favorite::class);
+        return $this->hasMany(FolderAnime::class);
     }
 
-    public function folders(): HasMany
+    public function foldersDoramas(): HasMany
     {
-        return $this->hasMany(Folder::class);
+        return $this->hasMany(FolderDorama::class);
     }
 
-    public function foldersWithDefault(): HasMany
+    public function foldersAnimesWithDefault(): HasMany
     {
-        return $this->hasMany(Folder::class)
-            ->orWhere('user_id', 0)
-            ->WhereNot('folderable_type', 0);
+        return $this->hasMany(FolderAnime::class)->orWhere('user_id', 0);
+    }
+
+    public function foldersDoramasWithDefault(): HasMany
+    {
+        return $this->hasMany(FolderDorama::class)->orWhere('user_id', 0);
     }
 
     public function favoriteAnimes(): HasManyThrough
     {
-        return $this->hasManyThrough(Anime::class, Favorite::class, 'user_id', 'id', 'id', 'favoriteable_id')
-            ->where('favoriteable_type', Anime::class);
+        return $this->hasManyThrough(Anime::class, FavoriteAnime::class, 'user_id', 'id', 'id', 'anime_id');
     }
 
     public function favoriteDoramas(): HasManyThrough
     {
-        return $this->hasManyThrough(Dorama::class, Favorite::class, 'user_id', 'id', 'id', 'favoriteable_id')
-            ->where('favoriteable_type', Dorama::class);
+        return $this->hasManyThrough(Dorama::class, FavoriteDorama::class, 'user_id', 'id', 'id', 'dorama_id');
     }
 
 }

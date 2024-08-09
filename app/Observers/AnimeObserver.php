@@ -6,6 +6,7 @@ use App\Enums\StatusEnum;
 use App\Models\Anime;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class AnimeObserver
 {
@@ -13,7 +14,7 @@ class AnimeObserver
     public function created(Anime $anime): void
     {
         if ($anime->status === StatusEnum::PUBLISHED->value) {
-            Cache::forget('main_animes');
+            Cache::store('redis_animes')->forget('main_animes');
         }
     }
 
@@ -35,10 +36,11 @@ class AnimeObserver
     public function updated(Anime $anime): void
     {
         if ($anime->isDirty() && $anime->status === StatusEnum::PUBLISHED->value) {
-            Cache::forget('main_animes');
+            Cache::store('redis_animes')->forget('main_animes');
         }
 
-        if ($anime->getOriginal('status') === StatusEnum::PUBLISHED->value || $anime->getAttribute('status') === StatusEnum::PUBLISHED->value) {
+        if ($anime->getOriginal('status') === StatusEnum::PUBLISHED->value
+            || $anime->getAttribute('status') === StatusEnum::PUBLISHED->value) {
             $this->forgetCacheMainAnime($anime);
         }
     }
@@ -66,6 +68,10 @@ class AnimeObserver
     public function forceDeleted(Anime $anime): void
     {
         $anime->ratings()->delete();
+        $anime->favorites()->delete();
+
+        $anime->animeEpisodes()->delete();
+
         $anime->genres()->detach();
         $anime->studios()->detach();
 
@@ -77,6 +83,7 @@ class AnimeObserver
             Storage::disk('anime_covers')->delete($anime->getOriginal('cover'));
         }
 
+        $this->forgetCacheAnime($anime);
         $this->forgetCacheMainAnime($anime);
     }
 
@@ -87,8 +94,14 @@ class AnimeObserver
 
     public function forgetCacheMainAnime(Anime $anime): void
     {
-        if (Cache::has('main_animes') && Cache::get('main_animes')->contains('id', $anime->id)) {
-            Cache::forget('main_animes');
+        if (Cache::store('redis_animes')->has('main_animes')
+            && Cache::store('redis_animes')->get('main_animes')->contains('id', $anime->id)) {
+            Cache::store('redis_animes')->forget('main_animes');
         }
+    }
+
+    public function forgetCacheAnime(Anime $anime): void
+    {
+        Cache::store('redis_animes')->forget('anime:' . $anime->slug);
     }
 }

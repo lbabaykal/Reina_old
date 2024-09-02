@@ -3,14 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusEnum;
+use App\Http\Filters\Fields\CountryFilter;
+use App\Http\Filters\Fields\GenreFilter;
+use App\Http\Filters\Fields\SortingFilter;
+use App\Http\Filters\Fields\StudioFilter;
+use App\Http\Filters\Fields\TitleFilter;
+use App\Http\Filters\Fields\TypeFilter;
+use App\Http\Filters\Fields\YearFromFilter;
+use App\Http\Filters\Fields\YearToFilter;
 use App\Http\Requests\FavoriteAnimesRequest;
 use App\Http\Requests\RatingRequest;
 use App\Models\Anime;
+use App\Models\Country;
 use App\Models\FavoriteAnime;
 use App\Models\FolderAnime;
+use App\Models\Genre;
+use App\Models\Studio;
+use App\Models\Type;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Pipeline;
 use Illuminate\View\View;
 
 class AnimeController extends Controller
@@ -18,14 +31,28 @@ class AnimeController extends Controller
 
     public function index(): View
     {
-        $animes = Anime::query()
-            ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-            ->where('status', StatusEnum::PUBLISHED)
-            ->latest('updated_at')
-            ->paginate(Reina::COUNT_ARTICLES_FULL)
-            ->withQueryString();
+        $animes = Pipeline::send(
+            Anime::query()
+                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
+        )
+            ->through([
+                TitleFilter::class,
+                TypeFilter::class,
+                GenreFilter::class,
+                CountryFilter::class,
+                StudioFilter::class,
+                YearFromFilter::class,
+                YearToFilter::class,
+                SortingFilter::class,
+            ])
+            ->thenReturn();
 
-        return view('layouts.anime.index')->with('animes', $animes);
+        return view('layouts.anime.index')
+            ->with('types', Type::all())
+            ->with('genres', Genre::all())
+            ->with('studios', Studio::all())
+            ->with('countries', Country::all())
+            ->with('animes', $animes->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
     }
 
     public function show($slug): View

@@ -3,14 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusEnum;
+use App\Http\Filters\Fields\CountryFilter;
+use App\Http\Filters\Fields\GenreFilter;
+use App\Http\Filters\Fields\SortingFilter;
+use App\Http\Filters\Fields\StudioFilter;
+use App\Http\Filters\Fields\TitleFilter;
+use App\Http\Filters\Fields\TypeFilter;
+use App\Http\Filters\Fields\YearFromFilter;
+use App\Http\Filters\Fields\YearToFilter;
 use App\Http\Requests\FavoriteDoramasRequest;
 use App\Http\Requests\RatingRequest;
+use App\Models\Country;
 use App\Models\Dorama;
 use App\Models\FolderDorama;
+use App\Models\Genre;
+use App\Models\Studio;
+use App\Models\Type;
 use App\Reina;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Pipeline;
 use Illuminate\View\View;
 
 class DoramaController extends Controller
@@ -18,14 +31,28 @@ class DoramaController extends Controller
 
     public function index(): View
     {
-        $dorams = Dorama::query()
-            ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-            ->where('status', StatusEnum::PUBLISHED)
-            ->latest('updated_at')
-            ->paginate(Reina::COUNT_ARTICLES_FULL)
-            ->withQueryString();
+        $doramas = Pipeline::send(
+            Dorama::query()
+                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
+        )
+            ->through([
+                TitleFilter::class,
+                TypeFilter::class,
+                GenreFilter::class,
+                CountryFilter::class,
+                StudioFilter::class,
+                YearFromFilter::class,
+                YearToFilter::class,
+                SortingFilter::class,
+            ])
+            ->thenReturn();
 
-        return view('layouts.dorama.index')->with('dorams', $dorams);
+        return view('layouts.dorama.index')
+            ->with('types', Type::all())
+            ->with('genres', Genre::all())
+            ->with('studios', Studio::all())
+            ->with('countries', Country::all())
+            ->with('doramas', $doramas->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
     }
 
     public function show($slug): View

@@ -8,7 +8,6 @@ use Illuminate\Database\Seeder;
 
 class FolderDoramaSeeder extends Seeder
 {
-
     public function run(): void
     {
         FolderDorama::query()->create([

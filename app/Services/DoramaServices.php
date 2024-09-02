@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Dorama;
+use App\Services\Image\ImageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,11 +14,19 @@ class DoramaServices
 {
     public function store(Request $request): RedirectResponse
     {
-        $imageServices = new ImageServices();
-
         $dorama = new Dorama();
-        $dorama->poster = $imageServices->saveWebp($request, 'poster', 'dorama_posters');
-        $dorama->cover = $imageServices->saveWebp($request, 'cover', 'dorama_covers');
+
+        $PosterImageService = new ImageService();
+        $dorama->poster = $PosterImageService
+            ->setFileField('poster')
+            ->setStorage('dorama_posters')
+            ->save();
+
+        $CoverImageService = new ImageService();
+        $dorama->cover = $CoverImageService
+            ->setFileField('cover')
+            ->setStorage('dorama_covers')
+            ->save();
 
         $dorama->title_org = $request->input('title_org');
         $dorama->title_ru = $request->input('title_ru');
@@ -38,7 +47,6 @@ class DoramaServices
         $dorama->duration = $request->input('duration');
         $dorama->release = $request->date('release');
         $dorama->description = $request->input('description');
-        $dorama->user_id = auth()->id();
         $dorama->status = $request->input('status');
 
         $dorama->rating = 0;
@@ -71,10 +79,17 @@ class DoramaServices
 
     public function update(Request $request, Model $dorama): RedirectResponse
     {
-        $imageServices = new ImageServices();
+        $PosterImageService = new ImageService();
+        $dorama->poster = $PosterImageService
+            ->setFileField('poster')
+            ->setStorage('dorama_posters')
+            ->save();
 
-        $dorama->poster = $imageServices->saveWebp($request, 'poster', 'dorama_posters') ?? $dorama->poster;
-        $dorama->cover = $imageServices->saveWebp($request, 'cover', 'dorama_covers') ?? $dorama->cover;
+        $CoverImageService = new ImageService();
+        $dorama->cover = $CoverImageService
+            ->setFileField('cover')
+            ->setStorage('dorama_covers')
+            ->save();
 
         $dorama->title_org = $request->input('title_org');
         $dorama->title_ru = $request->input('title_ru');
@@ -94,7 +109,6 @@ class DoramaServices
         $dorama->duration = $request->input('duration');
         $dorama->release = $request->input('release');
         $dorama->description = $request->input('description');
-        $dorama->user_id = auth()->id();
         $dorama->status = $request->input('status');
 
         $dorama->rating = 0;

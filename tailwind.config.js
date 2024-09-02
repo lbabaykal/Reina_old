@@ -64,5 +64,7 @@ export default {
         },
     },
 
-    plugins: [forms, typography, flowbite],
+    plugins: [forms, typography,
+        flowbite
+    ],
 };

@@ -7,7 +7,7 @@
 
     <section class="">
         <div class="relative w-full aspect-[16/7] flex flex-row select-none">
-            <div class="absolute bottom-24 left-24 min-w-[500] max-w-[800] flex flex-col justify-end justify-items-stretch items-center z-10 bg-black/60 backdrop-blur rounded py-2.5 px-5">
+            <div class="absolute bottom-24 left-24 min-w-[500] max-w-[8000] flex flex-col justify-end justify-items-stretch items-center z-10 bg-black/60 backdrop-blur rounded py-2.5 px-5">
 
                 <div class="w-full text-3xl font-bold text-center my-1">
                     {{ $dorama->title_ru }}
@@ -23,7 +23,7 @@
                     <span class="px-2">
                         {{ \Carbon\CarbonInterval::minutes($dorama->duration)->cascade()->forHumans(['short' => true]) }}
                     </span>
-                    <a href="{{ route('search.dorama', ['year_from' => \Illuminate\Support\Carbon::parse($dorama->release)->format('Y')]) }}"
+                    <a href="{{ route('dorama.index', ['year_from' => \Illuminate\Support\Carbon::parse($dorama->release)->format('Y')]) }}"
                        class="px-2 underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide"
                     >
                         {{ \Illuminate\Support\Carbon::parse($dorama->release)->format('Y') }}
@@ -31,19 +31,17 @@
                     <span class="px-2 text-love text-xl font-bold">{{ $dorama->age_rating }}</span>
                 </div>
 
-                <div class="w-full">
-                    <span class="my-1 text-gray-300 flex flex-row justify-center items-center content-center">
-                         @foreach($dorama->genres as $genre)
-                            <a href="{{ route('search.dorama', ['genre[]' => $genre->id]) }}"
-                               class="underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide mx-1"
-                            >
-                                {{ $genre->title_ru }}
-                            </a>
+                <div class="w-full my-1 text-gray-300 flex flex-row justify-center items-center content-center">
+                     @foreach($dorama->genres as $genre)
+                        <div class="text-nowrap mx-0.5">
+                            <a href="{{ route('dorama.index', ['genre[]' => $genre->id]) }}"
+                               class="underline decoration-1 underline-offset-4 hover:decoration-love hover:text-love tracking-wide"
+                            >{{ $genre->title_ru }}</a>
                              @if($loop->last === false)
-                                <span class="text-red-500 text-xl">•</span>
+                                <span class="text-red-500 text-xs">&#9679;</span>
                              @endif
-                         @endforeach
-                    </span>
+                        </div>
+                     @endforeach
                 </div>
 
                 <div class="w-full flex flex-row justify-center items-center content-center my-2">

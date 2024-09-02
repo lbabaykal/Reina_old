@@ -34,7 +34,6 @@ class Anime extends Model
         'duration',
         'release',
         'description',
-        'user_id',
         'status',
         'rating',
         'count_assessments',

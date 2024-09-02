@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Anime;
+use App\Services\Image\ImageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,11 +14,19 @@ class AnimeServices
 {
     public function store(Request $request): RedirectResponse
     {
-        $imageServices = new ImageServices();
-
         $anime = new Anime();
-        $anime->poster = $imageServices->saveWebp($request, 'poster', 'anime_posters');
-        $anime->cover = $imageServices->saveWebp($request, 'cover', 'anime_covers');
+
+        $PosterImageService = new ImageService();
+        $anime->poster = $PosterImageService
+            ->setFileField('poster')
+            ->setStorage('anime_posters')
+            ->save();
+
+        $CoverImageService = new ImageService();
+        $anime->cover = $CoverImageService
+            ->setFileField('cover')
+            ->setStorage('anime_covers')
+            ->save();
 
         $anime->title_org = $request->input('title_org');
         $anime->title_ru = $request->input('title_ru');
@@ -38,7 +47,6 @@ class AnimeServices
         $anime->duration = $request->input('duration');
         $anime->release = $request->date('release');
         $anime->description = $request->input('description');
-        $anime->user_id = auth()->id();
         $anime->status = $request->input('status');
 
         $anime->rating = 0;
@@ -71,10 +79,17 @@ class AnimeServices
 
     public function update(Request $request, Model $anime): RedirectResponse
     {
-        $imageServices = new ImageServices();
+        $PosterImageService = new ImageService();
+        $anime->poster = $PosterImageService
+            ->setFileField('poster')
+            ->setStorage('anime_posters')
+            ->save() ?? $anime->poster;
 
-        $anime->poster = $imageServices->saveWebp($request, 'poster', 'anime_posters') ?? $anime->poster;
-        $anime->cover = $imageServices->saveWebp($request, 'cover', 'anime_covers') ?? $anime->cover;
+        $CoverImageService = new ImageService();
+        $anime->cover = $CoverImageService
+            ->setFileField('cover')
+            ->setStorage('anime_covers')
+            ->save() ?? $anime->cover;
 
         $anime->title_org = $request->input('title_org');
         $anime->title_ru = $request->input('title_ru');
@@ -94,7 +109,6 @@ class AnimeServices
         $anime->duration = $request->input('duration');
         $anime->release = $request->input('release');
         $anime->description = $request->input('description');
-        $anime->user_id = auth()->id();
         $anime->status = $request->input('status');
 
         $anime->rating = 0;

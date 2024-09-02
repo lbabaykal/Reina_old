@@ -77,11 +77,11 @@
                             <dt class="text-gray-400 text-xl">{{ __('Жанр') }}</dt>
                             <dd>
                                 @foreach($anime->genres as $genre)
-                                    <a href="{{ route('search.anime', ['genre[]' => $genre->id]) }}"
+                                    <a href="{{ route('anime.index', ['genre[]' => $genre->id]) }}"
                                        class="underline decoration-1 underline-offset-4 hover:decoration-red-500 hover:text-red-500 tracking-wide"
                                     >{{ $genre->title_ru }}</a>
                                     @if($loop->last === false)
-                                        <span class="text-red-500 text-xl">•</span>
+                                        <span class="text-red-500 text-xs">&#9679;</span>
                                     @endif
                                 @endforeach
                             </dd>

@@ -8,7 +8,6 @@ use Illuminate\Database\Seeder;
 
 class FolderAnimeSeeder extends Seeder
 {
-
     public function run(): void
     {
         FolderAnime::query()->create([

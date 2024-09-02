@@ -34,7 +34,6 @@ class Dorama extends Model
         'duration',
         'release',
         'description',
-        'user_id',
         'status',
         'rating',
         'count_assessments',

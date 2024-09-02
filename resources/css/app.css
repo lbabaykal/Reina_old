@@ -17,7 +17,7 @@
 }
 
 .margin-content {
-    @apply mt-[60];
+    @apply mt-[60px];
 }
 
 .header-change {

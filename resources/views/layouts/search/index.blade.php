@@ -7,7 +7,7 @@
 
         @if($animes->isNotEmpty())
             <div class="py-1 my-2 select-none flex flex-row items-center justify-center">
-                <a href="{{ route('search.anime', request()->query()) }}" class="font-bold group flex flex-row items-center justify-center text-3xl">
+                <a href="{{ route('anime.index', request()->query()) }}" class="font-bold group flex flex-row items-center justify-center text-3xl">
                     <span class="text-red-500">❮</span>
                     <span class="px-3 group-hover:text-red-500 duration-300">НАЙДЕНО</span>
                     <span class="text-red-500 text-4xl">{{ $animes->total() }}</span>
@@ -23,7 +23,7 @@
 
         @if($doramas->isNotEmpty())
             <div class="py-1 my-2 select-none flex flex-row items-center justify-center">
-                <a href="{{ route('search.dorama', request()->query()) }}" class="font-bold group flex flex-row items-center justify-center text-3xl">
+                <a href="{{ route('dorama.index', request()->query()) }}" class="font-bold group flex flex-row items-center justify-center text-3xl">
                     <span class="text-violet-500">❮</span>
                     <span class="px-3 group-hover:text-violet-500 duration-300">НАЙДЕНО</span>
                     <span class="text-violet-500 text-4xl">{{ $doramas->total() }}</span>

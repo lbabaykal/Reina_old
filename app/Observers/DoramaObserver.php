@@ -13,16 +13,12 @@ class DoramaObserver
     public function created(Dorama $dorama): void
     {
         if ($dorama->status === StatusEnum::PUBLISHED->value) {
-            Cache::store('redis_doramas')->forget('main_doramas');
+            $this->forgetCacheMainDorama();
         }
     }
 
     public function updating(Dorama $dorama): void
     {
-        if ($dorama->isDirty() && $dorama->status === StatusEnum::PUBLISHED->value) {
-            $dorama->timestamps = true;
-        }
-
         if ($dorama->isDirty('poster') && $dorama->getOriginal('poster')) {
             Storage::disk('dorama_posters')->delete($dorama->getOriginal('poster'));
         }
@@ -30,17 +26,21 @@ class DoramaObserver
         if ($dorama->isDirty('cover') && $dorama->getOriginal('cover')) {
             Storage::disk('dorama_covers')->delete($dorama->getOriginal('cover'));
         }
+
+        if ($dorama->isDirty('slug')) {
+            Cache::store('redis_doramas')->forget('dorama:' . $dorama->getOriginal('slug'));
+        }
     }
 
     public function updated(Dorama $dorama): void
     {
-        if ($dorama->isDirty() && $dorama->status === StatusEnum::PUBLISHED->value) {
-            Cache::store('redis_doramas')->forget('main_doramas');
-        }
-
-        if ($dorama->getOriginal('status') === StatusEnum::PUBLISHED->value
-            || $dorama->getAttribute('status') === StatusEnum::PUBLISHED->value) {
-            $this->forgetCacheMainDorama($dorama);
+        if (
+            $dorama->getOriginal('status') === StatusEnum::PUBLISHED->value
+            && $dorama->status !== StatusEnum::PUBLISHED->value
+            || $dorama->status === StatusEnum::PUBLISHED->value
+        ) {
+            $this->forgetCacheDorama($dorama);
+            $this->forgetCacheMainDorama();
         }
     }
 
@@ -56,7 +56,8 @@ class DoramaObserver
 
     public function deleted(Dorama $dorama): void
     {
-        $this->forgetCacheMainDorama($dorama);
+        $this->forgetCacheDorama($dorama);
+        $this->forgetCacheMainDorama();
     }
 
     public function restored(Dorama $dorama): void
@@ -83,7 +84,7 @@ class DoramaObserver
         }
 
         $this->forgetCacheDorama($dorama);
-        $this->forgetCacheMainDorama($dorama);
+        $this->forgetCacheMainDorama();
     }
 
     public function retrieved(Dorama $dorama): void
@@ -91,12 +92,9 @@ class DoramaObserver
         //
     }
 
-    public function forgetCacheMainDorama(Dorama $dorama): void
+    public function forgetCacheMainDorama(): void
     {
-        if (Cache::store('redis_doramas')->has('main_doramas')
-            && Cache::store('redis_doramas')->get('main_doramas')->contains('id', $dorama->id)) {
-            Cache::store('redis_doramas')->forget('main_doramas');
-        }
+        Cache::store('redis_doramas')->forget('main_doramas');
     }
 
     public function forgetCacheDorama(Dorama $dorama): void

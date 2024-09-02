@@ -1,13 +1,24 @@
-<div class="w-full">
+<form id="search" method="GET" class="w-full">
 
     <nav class="flex flex-row justify-between px-4 pt-4 pb-1">
-        <button class="flex items-center justify-between w-[200] py-2 px-3 font-medium text-white bg-blackSimple border-b border-love hover:bg-blackActive"
+
+{{--        <button class="flex items-center justify-between w-[200] py-2 px-3 font-medium text-white bg-blackSimple border-b border-love hover:bg-blackActive"--}}
+{{--        >--}}
+{{--            {{ __('Сортировка') }}--}}
+{{--            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">--}}
+{{--                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>--}}
+{{--            </svg>--}}
+{{--        </button>--}}
+
+
+        <select id="sorting"
+                name="sorting"
+                class="flex items-center justify-between w-[240] py-2 px-3 font-medium text-white bg-blackSimple border-b border-love hover:bg-blackActive"
         >
-            {{ __('Сортировка') }}
-            <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-            </svg>
-        </button>
+            <option value="1" @selected(1 == request('sorting'))>По дате добавления</option>
+            <option value="2" @selected(2 == request('sorting'))>По рейтингу</option>
+            <option value="3" @selected(3 == request('sorting'))>По премьере</option>
+        </select>
 
         <div class="flex items-center justify-between">
             <input form="search"
@@ -31,6 +42,7 @@
         <button id="filters-dropdown-button"
                 data-collapse-toggle="filters-dropdown"
                 class="flex items-center justify-between w-[200] py-2 px-3 font-medium text-white bg-blackSimple border-b border-love hover:bg-blackActive"
+                type="button"
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
@@ -45,7 +57,7 @@
     <div id="filters-dropdown"
          class="bg-blackSimple border-blackActive shadow-sm border-y hidden pt-3 mt-2"
     >
-        <form id="search" method="GET" class="flex flex-row justify-center">
+        <div class="flex flex-row justify-center">
 
             <div class="bg-blackSimple text-white w-60 overflow-hidden select-none mx-5">
                 <div class="text-center font-bold">
@@ -297,10 +309,10 @@
                 </div>
             </div>
 
-        </form>
+        </div>
     </div>
 
-</div>
+</form>
 
 
 <script>

@@ -36,13 +36,18 @@ Route::middleware([
     })->name('dashboard');
 });
 
+
+
+
+//Route::get('/{page?}', function() {
+//    return view('app');
+//})->where('page', '[\/\w\.-]*');
+
 //========================================================================================
 
 // ====SEARCH====
 Route::get('/', MainController::class)->name('main');
 Route::get('/search', SearchController::class)->name('search');
-Route::get('/search_anime', [SearchController::class, 'anime'])->name('search.anime');
-Route::get('/search_dorama', [SearchController::class, 'dorama'])->name('search.dorama');
 
 // ====ANIME====
 Route::prefix('anime')->name('anime.')->group(function () {

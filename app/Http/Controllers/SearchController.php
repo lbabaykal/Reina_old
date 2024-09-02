@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Filters\Fields\CountryFilter;
 use App\Http\Filters\Fields\GenreFilter;
+use App\Http\Filters\Fields\SortingFilter;
 use App\Http\Filters\Fields\StudioFilter;
 use App\Http\Filters\Fields\TitleFilter;
 use App\Http\Filters\Fields\TypeFilter;
@@ -27,8 +28,7 @@ class SearchController extends Controller
     {
         $animes = Pipeline::send(Anime::query()
                 ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-                ->limit(Reina::COUNT_ARTICLES_SEARCH)
-                ->latest('updated_at'))
+        )
             ->through([
                 TitleFilter::class,
                 TypeFilter::class,
@@ -37,13 +37,13 @@ class SearchController extends Controller
                 StudioFilter::class,
                 YearFromFilter::class,
                 YearToFilter::class,
+                SortingFilter::class,
             ])
             ->thenReturn();
 
         $doramas = Pipeline::send(
             Dorama::query()
                 ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-                ->limit(Reina::COUNT_ARTICLES_SEARCH)
                 ->latest('updated_at')
         )
             ->through([
@@ -54,6 +54,7 @@ class SearchController extends Controller
                 StudioFilter::class,
                 YearFromFilter::class,
                 YearToFilter::class,
+                SortingFilter::class,
             ])
             ->thenReturn();
 
@@ -62,62 +63,8 @@ class SearchController extends Controller
             ->with('genres', Genre::all())
             ->with('studios', Studio::all())
             ->with('countries', Country::all())
-            ->with('animes', $animes->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString())
-            ->with('doramas', $doramas->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
-    }
-
-
-    public function anime(): View
-    {
-        $animes = Pipeline::send(
-            Anime::query()
-                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-                ->latest('updated_at')
-        )
-            ->through([
-                TitleFilter::class,
-                TypeFilter::class,
-                GenreFilter::class,
-                CountryFilter::class,
-                StudioFilter::class,
-                YearFromFilter::class,
-                YearToFilter::class,
-            ])
-            ->thenReturn();
-
-        return view('layouts.search.anime')
-            ->with('types', Type::all())
-            ->with('genres', Genre::all())
-            ->with('studios', Studio::all())
-            ->with('countries', Country::all())
-            ->with('animes', $animes->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
-    }
-
-    public function dorama(): View
-    {
-        $doramas = Pipeline::send(
-            Dorama::query()
-                ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
-                ->limit(Reina::COUNT_ARTICLES_SEARCH)
-                ->latest('updated_at')
-        )
-            ->through([
-                TitleFilter::class,
-                TypeFilter::class,
-                GenreFilter::class,
-                CountryFilter::class,
-                StudioFilter::class,
-                YearFromFilter::class,
-                YearToFilter::class,
-            ])
-            ->thenReturn();
-
-        return view('layouts.search.dorama')
-            ->with('types', Type::all())
-            ->with('genres', Genre::all())
-            ->with('studios', Studio::all())
-            ->with('countries', Country::all())
-            ->with('doramas', $doramas->paginate(Reina::COUNT_ARTICLES_FULL)->withQueryString());
+            ->with('animes', $animes->paginate(Reina::COUNT_ARTICLES_SEARCH)->withQueryString())
+            ->with('doramas', $doramas->paginate(Reina::COUNT_ARTICLES_SEARCH)->withQueryString());
     }
 
 }

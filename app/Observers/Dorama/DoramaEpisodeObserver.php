@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace App\Observers\Dorama;
 
 use App\Enums\StatusEnum;
 use App\Models\Dorama;
@@ -52,7 +52,8 @@ class DoramaEpisodeObserver
     public function updateFieldAndForgetCache(DoramaEpisode $doramaEpisode): void
     {
         $this->updateDoramaFieldEpisodesReleased($doramaEpisode);
-        $this->forgetCacheMainDorama($doramaEpisode);
+        $this->forgetCacheMainDorama();
+        $this->forgetCacheDorama($doramaEpisode);
     }
 
     public function updateDoramaFieldEpisodesReleased(DoramaEpisode $doramaEpisode): void
@@ -67,10 +68,15 @@ class DoramaEpisodeObserver
         ]);
     }
 
-    public function forgetCacheMainDorama(DoramaEpisode $doramaEpisode): void
+    public function forgetCacheMainDorama(): void
     {
-        if (Cache::has('main_doramas') && Cache::get('main_doramas')->contains('id', $doramaEpisode->dorama->id)) {
-            Cache::forget('main_doramas');
-        }
+        Cache::store('redis_doramas')->forget('main_doramas');
+    }
+
+    public function forgetCacheDorama(DoramaEpisode $doramaEpisode): void
+    {
+        Cache::store('redis_doramas')->forget('dorama:' . $doramaEpisode->dorama->slug);
+        Cache::store('redis_doramas')->forget('dorama_watch:' . $doramaEpisode->dorama->slug);
     }
 }
+

@@ -15,9 +15,15 @@
             </a>
         </div>
 
-        <div class="w-full px-2.5 grid gap-3 place-items-center grid-flow-row grid-cols-8">
-            @each('layouts.anime.card', $foldersAnimes, 'anime')
-        </div>
+        @if($foldersAnimes->isNotEmpty())
+            <div class="w-full px-2.5 grid gap-3 place-items-center grid-flow-row grid-cols-8">
+                @each('layouts.anime.card', $foldersAnimes, 'anime')
+            </div>
+        @else
+            <div class="w-full flex justify-center py-6 text-5xl text-red-400 font-bold">
+                {{ __('Пусто') }}
+            </div>
+        @endif
 
         <div class="w-full font-bold select-none py-2 text-center ">
             <a href="{{ route('user.folders.doramas.index') }}"
@@ -32,9 +38,16 @@
             </a>
         </div>
 
-        <div class="w-full px-2.5 grid gap-3 place-items-center grid-flow-row grid-cols-8">
-            @each('layouts.dorama.card', $foldersDoramas, 'dorama')
-        </div>
+        @if($foldersDoramas->isNotEmpty())
+            <div class="w-full px-2.5 grid gap-3 place-items-center grid-flow-row grid-cols-8">
+                @each('layouts.dorama.card', $foldersDoramas, 'dorama')
+            </div>
+        @else
+            <div class="w-full flex justify-center py-6 text-5xl text-violet-400 font-bold">
+                {{ __('Пусто') }}
+            </div>
+        @endif
+
 
     </section>
 @endsection

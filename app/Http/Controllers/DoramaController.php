@@ -31,6 +31,8 @@ class DoramaController extends Controller
 
     public function index(): View
     {
+        request()->merge(['sorting' => request()->input('sorting', 1)]);
+
         $doramas = Pipeline::send(
             Dorama::query()
                 ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
@@ -123,26 +125,6 @@ class DoramaController extends Controller
             ->with('ratingUser', $ratingUser)
             ->with('foldersUser', $foldersUser)
             ->with('episodes', $episodes);
-    }
-
-    public function rating(RatingRequest $request, Dorama $dorama): RedirectResponse
-    {
-        $dorama->ratings()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['assessment' => $request->input('assessment')]
-        );
-
-        return redirect()->back();
-    }
-
-    public function favorite(FavoriteDoramasRequest $request, Dorama $dorama): RedirectResponse
-    {
-        $dorama->favorites()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['folder_dorama_id' => $request->input('folder')]
-        );
-
-        return redirect()->back();
     }
 
 }

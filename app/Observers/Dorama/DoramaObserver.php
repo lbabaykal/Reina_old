@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace App\Observers\Dorama;
 
 use App\Enums\StatusEnum;
 use App\Models\Dorama;
@@ -28,7 +28,8 @@ class DoramaObserver
         }
 
         if ($dorama->isDirty('slug')) {
-            Cache::store('redis_doramas')->forget('dorama:' . $dorama->getOriginal('slug'));
+            cache()->store('redis_doramas')->forget('dorama:' . $dorama->getOriginal('slug'));
+            cache()->store('redis_doramas')->forget('dorama_watch:' . $dorama->getOriginal('slug'));
         }
     }
 
@@ -94,11 +95,12 @@ class DoramaObserver
 
     public function forgetCacheMainDorama(): void
     {
-        Cache::store('redis_doramas')->forget('main_doramas');
+        cache()->store('redis_doramas')->forget('main_doramas');
     }
 
     public function forgetCacheDorama(Dorama $dorama): void
     {
-        Cache::store('redis_doramas')->forget('dorama:' . $dorama->slug);
+        cache()->store('redis_doramas')->forget('dorama:' . $dorama->slug);
+        cache()->store('redis_doramas')->forget('dorama_watch:' . $dorama->slug);
     }
 }

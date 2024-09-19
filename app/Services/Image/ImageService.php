@@ -10,8 +10,8 @@ class ImageService extends AbstractImage
 
     public function __construct()
     {
-        $this->setFormat(config('image.format') ?? 'webp');
-        $this->setStorage(config('image.storage') ?? 'images');
+        $this->setFormat('webp');
+        $this->setStorage('images');
     }
 
     public function save(): null|string

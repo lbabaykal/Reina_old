@@ -11,10 +11,12 @@ use App\Http\Controllers\AdminPanel\StudiosAdminController;
 use App\Http\Controllers\AdminPanel\TypeAdminController;
 use App\Http\Controllers\AnimeController;
 use App\Http\Controllers\DoramaController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\Folder\AnimeFolderController;
 use App\Http\Controllers\Folder\DoramaFolderController;
 use App\Http\Controllers\Folder\FolderController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -56,8 +58,10 @@ Route::prefix('anime')->name('anime.')->group(function () {
     Route::get('/', [AnimeController::class, 'index'])->name('index');
 
     Route::middleware('auth')->group(function () {
-        Route::post('/{anime:slug}/rating', [AnimeController::class, 'rating'])->name('rating');
-        Route::post('/{anime:slug}/favorite', [AnimeController::class, 'favorite'])->name('favorite');
+        Route::patch('/{anime:slug}/rating', [RatingController::class, 'addToAnime'])->name('rating.add');
+        Route::delete('/{anime:slug}/rating', [RatingController::class, 'removeToAnime'])->name('rating.remove');
+        Route::patch('/{anime:slug}/favorite', [FavoriteController::class, 'addToAnime'])->name('favorite.add');
+        Route::delete('/{anime:slug}/favorite', [FavoriteController::class, 'removeToAnime'])->name('favorite.remove');
     });
 });
 
@@ -68,8 +72,10 @@ Route::prefix('dorama')->name('dorama.')->group(function () {
     Route::get('/', [DoramaController::class, 'index'])->name('index');
 
     Route::middleware('auth')->group(function () {
-        Route::post('/{dorama:slug}/rating', [DoramaController::class, 'rating'])->name('rating');
-        Route::post('/{dorama:slug}/favorite', [DoramaController::class, 'favorite'])->name('favorite');
+        Route::patch('/{dorama:slug}/rating', [RatingController::class, 'addToDorama'])->name('rating.add');
+        Route::delete('/{dorama:slug}/rating', [RatingController::class, 'removeToDorama'])->name('rating.remove');
+        Route::patch('/{dorama:slug}/favorite', [FavoriteController::class, 'addToDorama'])->name('favorite.add');
+        Route::delete('/{dorama:slug}/favorite', [FavoriteController::class, 'removeToDorama'])->name('favorite.remove');
     });
 });
 
@@ -124,6 +130,7 @@ Route::middleware('auth')
             Route::get('/{anime:slug}/restore', [AnimeAdminController::class, 'restore'])->name('restore');
 
             Route::prefix('{anime}')->group(function () {
+                Route::get('/', [AnimeAdminController::class, 'regenerateSlug'])->name('regenerateSlug');
                 Route::resource('episodes', AnimeEpisodesAdminController::class)->except(['show']);
             });
         });
@@ -137,6 +144,7 @@ Route::middleware('auth')
             Route::get('/{dorama:slug}/restore', [DoramaAdminController::class, 'restore'])->name('restore');
 
             Route::prefix('{dorama}')->group(function () {
+                Route::get('/', [DoramaAdminController::class, 'regenerateSlug'])->name('regenerateSlug');
                 Route::resource('episodes', DoramaEpisodesAdminController::class)->except(['show']);
             });
         });

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Observers\DoramaEpisodeObserver;
+use App\Observers\Dorama\DoramaEpisodeObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ class DoramaEpisode extends Model
         'title_en',
         'status',
         'note',
-        'content',
+        'release_date',
     ];
 
     public function dorama(): BelongsTo

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers;
+namespace App\Observers\Anime;
 
 use App\Enums\StatusEnum;
 use App\Models\Anime;
@@ -52,7 +52,8 @@ class AnimeEpisodeObserver
     public function updateFieldAndForgetCache(AnimeEpisode $animeEpisode): void
     {
         $this->updateAnimeFieldEpisodesReleased($animeEpisode);
-        $this->forgetCacheMainAnime($animeEpisode);
+        $this->forgetCacheMainAnime();
+        $this->forgetCacheAnime($animeEpisode);
     }
 
     public function updateAnimeFieldEpisodesReleased(AnimeEpisode $animeEpisode): void
@@ -67,10 +68,14 @@ class AnimeEpisodeObserver
         ]);
     }
 
-    public function forgetCacheMainAnime(AnimeEpisode $animeEpisode): void
+    public function forgetCacheMainAnime(): void
     {
-        if (Cache::has('main_animes') && Cache::get('main_animes')->contains('id', $animeEpisode->anime->id)) {
-            Cache::forget('main_animes');
-        }
+        Cache::store('redis_animes')->forget('main_animes');
+    }
+
+    public function forgetCacheAnime(AnimeEpisode $animeEpisode): void
+    {
+        Cache::store('redis_animes')->forget('anime:' . $animeEpisode->anime->slug);
+        Cache::store('redis_animes')->forget('anime_watch:' . $animeEpisode->anime->slug);
     }
 }

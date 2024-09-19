@@ -5,11 +5,20 @@
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
             <div class="relative overflow-x-auto shadow-md">
                 <div class="p-5 text-xl font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                    Редактирование Аниме
+                    Редактирование аниме - {{ $anime->title_ru }}
                     @if ($message = session('message'))
                         - <span class="text-lime-500">{{ $message }}</span>
                     @endif
+
+                    <a href="{{ route('admin.anime.episodes.index', $anime) }}">
+                        <button type="button" class="px-4 py-2 bg-orange-400 hover:bg-orange-500 rounded">Эпизоды</button>
+                    </a>
                 </div>
+
+                <a href="{{ route('admin.anime.regenerateSlug', $anime) }}">
+                    <button type="button" class="px-4 py-2 bg-red-400 hover:bg-red-500 rounded">Перегенерировать слаг</button>
+                </a>
+
                 <form action="{{ route('admin.anime.update', $anime) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')

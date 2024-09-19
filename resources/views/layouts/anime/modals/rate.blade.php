@@ -32,12 +32,14 @@
                     </div>
                 @endif
 
-                <form action="{{ route('anime.rating', $anime) }}"
+                <form action="{{ route('anime.rating.add', $anime) }}"
                       method="POST"
                       id="rating"
                       class="flex flex-row justify-center items-center text-white text-xl"
                 >
                     @csrf
+                    @method('PATCH')
+
                     @for ($i = 1; $i < 11; $i++)
                         <div class="group flex text-white hover:text-yellow-300">
                             <input id="{{ $i }}"

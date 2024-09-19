@@ -6,12 +6,15 @@
             <div class="relative overflow-x-auto shadow-md">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <caption class="p-5 text-xl font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                        Список эпизодов {{ $anime->title_ru }} {{ $anime->episodes_released }}/{{ $anime->episodes_total }}
+                        Список эпизодов - {{ $anime->title_ru }} {{ $anime->episodes_released }}/{{ $anime->episodes_total }}
                         @if ($message = session('message'))
                             - <span class="text-lime-500">{{ $message }}</span>
                         @endif
-                        <p class="mt-1 text-base text-red-500 dark:text-gray-400">
-                            <a href="{{ route('admin.anime.episodes.create', $anime) }}">
+                        <p class="mt-1 text-base">
+                            <a href="{{ route('admin.anime.edit', $anime) }}" class="text-red-500 hover:text-blue-500 mr-2">
+                                Назад к редактированию
+                            </a>
+                            <a href="{{ route('admin.anime.episodes.create', $anime) }}" class="text-red-500 hover:text-blue-500 mr-2">
                                 Добавить эпизод
                             </a>
                         </p>
@@ -28,10 +31,10 @@
                             Статус
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Примечание
+                            Дата премьеры
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Статус
+                            Редактировать
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Удаление
@@ -51,7 +54,7 @@
                                 {{ $episode->status }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $episode->note }}
+                                {{ $episode->release_date }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('admin.anime.episodes.edit', [$anime, $episode]) }}"

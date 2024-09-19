@@ -26,7 +26,7 @@ class EpisodeStoreRequest extends FormRequest
             'title_en' => ['required', 'string', 'min:1', 'max:255'],
             'status' => ['required', Rule::in(\App\Enums\StatusEnum::cases())],
             'note' => ['nullable', 'string'],
-            'content' => ['nullable', 'string'],
+            'release_date' => ['required', 'date'],
         ];
     }
 

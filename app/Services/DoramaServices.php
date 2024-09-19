@@ -79,17 +79,21 @@ class DoramaServices
 
     public function update(Request $request, Model $dorama): RedirectResponse
     {
-        $PosterImageService = new ImageService();
-        $dorama->poster = $PosterImageService
-            ->setFileField('poster')
-            ->setStorage('dorama_posters')
-            ->save();
+        if (request()->has('poster')) {
+            $PosterImageService = new ImageService();
+            $dorama->poster = $PosterImageService
+                ->setFileField('poster')
+                ->setStorage('dorama_posters')
+                ->save();
+        }
 
-        $CoverImageService = new ImageService();
-        $dorama->cover = $CoverImageService
-            ->setFileField('cover')
-            ->setStorage('dorama_covers')
-            ->save();
+        if (request()->has('cover')) {
+            $CoverImageService = new ImageService();
+            $dorama->cover = $CoverImageService
+                ->setFileField('cover')
+                ->setStorage('dorama_covers')
+                ->save();
+        }
 
         $dorama->title_org = $request->input('title_org');
         $dorama->title_ru = $request->input('title_ru');

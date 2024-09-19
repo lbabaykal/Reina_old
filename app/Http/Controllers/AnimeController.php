@@ -31,6 +31,8 @@ class AnimeController extends Controller
 
     public function index(): View
     {
+        request()->merge(['sorting' => request()->input('sorting', 1)]);
+
         $animes = Pipeline::send(
             Anime::query()
                 ->select(['slug', 'poster', 'title_ru', 'rating', 'episodes_released', 'episodes_total'])
@@ -123,26 +125,6 @@ class AnimeController extends Controller
             ->with('ratingUser', $ratingUser)
             ->with('foldersUser', $foldersUser)
             ->with('episodes', $episodes);
-    }
-
-    public function rating(RatingRequest $request, Anime $anime): RedirectResponse
-    {
-        $anime->ratings()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['assessment' => $request->input('assessment')]
-        );
-
-        return redirect()->back();
-    }
-
-    public function favorite(FavoriteAnimesRequest $request, Anime $anime): RedirectResponse
-    {
-        $anime->favorites()->updateOrCreate(
-            ['user_id' => auth()->id()],
-            ['folder_anime_id' => $request->input('folder')]
-        );
-
-        return redirect()->back();
     }
 
 }

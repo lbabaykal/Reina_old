@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Observers\DoramaObserver;
+use App\Observers\Dorama\DoramaObserver;
 use App\Traits\AnimeAndDoramTrait;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,7 +41,7 @@ class Dorama extends Model
         'is_rating',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function favorites(): HasMany
     {

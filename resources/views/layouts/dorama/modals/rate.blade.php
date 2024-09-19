@@ -32,12 +32,14 @@
                     </div>
                 @endif
 
-                <form action="{{ route('dorama.rating', $dorama) }}"
+                <form action="{{ route('dorama.rating.add', $dorama) }}"
                       method="POST"
                       id="rating"
                       class="flex flex-row justify-center items-center text-white text-xl"
                 >
                     @csrf
+                    @method('PATCH')
+
                     @for ($i = 1; $i < 11; $i++)
                         <div class="group flex text-white hover:text-yellow-300">
                             <input id="{{ $i }}"

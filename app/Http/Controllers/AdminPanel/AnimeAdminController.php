@@ -16,6 +16,7 @@ use App\Reina;
 use App\Services\AnimeServices;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class AnimeAdminController extends Controller
@@ -161,5 +162,19 @@ class AnimeAdminController extends Controller
             ->withQueryString();
 
         return view('admin.anime.deleted')->with('animes', $animes);
+    }
+
+    public function regenerateSlug($animeSlug)
+    {
+        $anime = Anime::query()
+            ->withoutGlobalScopes()
+            ->where('slug', $animeSlug)
+            ->firstOrFail();
+
+        $anime->generateSlug();
+        $anime->timestamps = false;
+        $anime->update();
+
+        return redirect()->route('admin.anime.index')->with('message', "Для аниме {$anime->title_ru} перегенерирован слаг.");
     }
 }

@@ -79,17 +79,21 @@ class AnimeServices
 
     public function update(Request $request, Model $anime): RedirectResponse
     {
-        $PosterImageService = new ImageService();
-        $anime->poster = $PosterImageService
-            ->setFileField('poster')
-            ->setStorage('anime_posters')
-            ->save() ?? $anime->poster;
+        if (request()->has('poster')) {
+            $PosterImageService = new ImageService();
+            $anime->poster = $PosterImageService
+                ->setFileField('poster')
+                ->setStorage('anime_posters')
+                ->save() ?? $anime->poster;
+        }
 
-        $CoverImageService = new ImageService();
-        $anime->cover = $CoverImageService
-            ->setFileField('cover')
-            ->setStorage('anime_covers')
-            ->save() ?? $anime->cover;
+        if (request()->has('cover')) {
+            $CoverImageService = new ImageService();
+            $anime->cover = $CoverImageService
+                ->setFileField('cover')
+                ->setStorage('anime_covers')
+                ->save() ?? $anime->cover;
+        }
 
         $anime->title_org = $request->input('title_org');
         $anime->title_ru = $request->input('title_ru');
